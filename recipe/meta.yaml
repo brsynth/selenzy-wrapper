@@ -1,4 +1,4 @@
-{% set name = "chemlite" %}
+{% set name = "selenzy_wrapper" %}
 {% set data = load_setup_py_data() %}
 
 package:
