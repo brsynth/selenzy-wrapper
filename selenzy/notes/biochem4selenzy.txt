@@ -1,0 +1,29 @@
+Data sources currently required for running Selenzy that could be retrieved from biochem4j:
+
+1. Currently from MetaNetX:
+
+- Chemicals: name, inchi, id (metanetx)
+- Reactions: stoichiometric equation based on chemical ids
+
+2. Currently from Metacyc and rhea:
+
+- Enzyme sequences associated with reactions, uniprot id, description, organism id (ncbi taxonomy), confidence score of annotation for each associated reaction
+
+3. Pre/post-processing:
+
+- Reaction consensus direction: knowledge-based consensus direction based on chemical transformations (in-house algorithm
+- Chemical fingerprints. Currently they are precomputed and stored in a python object. Potentially they could be stored in biochem4j.
+- Phylogenetic distance between chassis and organism sources for each sequence.
+
+4. Thermodynamics and kinetics:
+
+- Reaction Gibbs free energy (experimental/predicted from Metacyc).
+- Substrate KM (experimental from Brenda and Uniprot/predicted).
+- Turnover rate kcat (experimental from Brenda and Uniprot/predicted).
+
+
+
+
+
+
+

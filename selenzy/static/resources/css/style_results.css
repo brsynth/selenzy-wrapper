@@ -1,0 +1,122 @@
+body            { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: medium;}
+a, h1, h2       { color: #377ba8; }
+h1, h2          { margin: 0; }
+h1              { border-bottom: 2px solid #eee; }
+
+
+tables.dataframe, .dataframe th, .dataframe td {
+  border: none;
+  border-bottom: 1px solid #C8C8C8;
+  border-collapse: collapse;
+  text-align:left;
+  padding: 10px;
+  margin-bottom: 40px;
+  font-size: 0.9em;
+}
+
+.dataframe th {
+    background-color: #68d2e1;
+    color: white;
+}
+
+tr {
+    title: 
+}
+
+
+tr:nth-child(odd)	{ background-color:#eee; }
+tr:nth-child(even)	{ background-color:#fff; }
+
+tr:hover            { background-color: #ffff99;}
+
+.head {
+    float: left;
+    display: inline;
+}
+.footcell {
+    clear: both;
+}
+tr.selected {
+    background-color:  #c6e81b;
+}
+th.selected {
+    background-color:  #c6e81b;
+}
+.Selector {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-style: groove;
+    border-width: 1px;
+    background-color: rgba(163, 255, 188, 0.25);
+}
+.Filter {
+    float: left;
+}
+.Navigate {
+    float: left;
+}
+.Remove {
+    float: left;
+}
+.Custom {
+    float: left;
+}
+.Return {
+    float: right;
+}
+.disabledbutton {
+    pointer-events: none;
+    opacity: 0.4;
+}
+.item {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.active {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.hidden {
+    visibility: hidden;
+    width: 0px;
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+.labfile {
+    cursor: pointer;
+}
+.labwrap {
+    cursor: pointer;
+    vertical-align: middle;
+}
+.score {
+    display: none;
+}
+.score li {
+    list-style-type: none;
+}
+.sclabel {
+    width: 300px;
+    text-align: left;
+    float: left;
+}
+.sccheck {
+   float: left;
+}
+.scval {
+    margin-left: 20px;
+    text-align: right;
+    width: 100px;
+    clear: both;
+}
+.scval[disabled] {
+    color: #DCDAD1;
+}
+.updatescore {
+    float: right;
+}

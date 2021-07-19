@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Selenzyme | Results </title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='resources/css/style_results.css') }}">
+<script src="{{url_for('static', filename='vendors/jquery/jquery-3.1.1.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendors/jquery-ui-1.12.1.custom/jquery-ui.css')}}"></link>
+<script src="{{url_for('static', filename='vendors/jquery-ui-1.12.1.base/jquery-ui.js')}}"></script>
+<script src="{{url_for('static', filename='resources/js/results.js')}}"></script>
+</head>
+<body>
+<div class=page>
+  <h1>Results</h1>
+  <div class="Remove Selector"><a href="#">[Delete selected rows]</a></div>
+  <div class="Navigate Selector"></div>
+  <div class="Custom Selector">
+    <center>
+      <div class="labwrap">
+	  <a href='#'>
+	    <label for="fasta" class="labfile">[Add custom sequences (FASTA)]</label>
+	  </a>
+<!--	<form method="POST" action="results" enctype = "multipart/form-data" id="add" class="hidden"> -->
+	<form enctype = "multipart/form-data" id="add" class="hidden">
+	  <input type="file" name="fasta" id="fasta" class="hidden"></input>
+	  <input type="hidden" name="session" value="{{sessionid}}"></input>
+	</form>
+      </div>
+    </center>
+  </div>
+ <div class="Filter Selector"><a href='#'>[Column definition/Change score ]</a></div>
+  <div class="Return Selector"><a href="/">[New query]</a></div>
+  <div style="clear: both;"></div>
+  <h2></h2>
+    {{ tables|safe }}
+
+</div>
+<div class="score">
+<ul>
+{% for item in score %}
+<li>
+  <span class="sclabel"><b>{{item[0]}}.</b> {{item[1]|safe}}</span>
+  <input type="number" value="{{item[2]}}" colname="{{item[0]}}" class="scval"></input>
+  <input type="checkbox" class="sccheck" {% if item[3] %} checked {% else %} {{ item[3] }} {% endif %}/>
+</li>
+{% endfor %}
+</ul>
+<div class="equation"></div>
+<div class="updatescore Selector"><a href="#">[Update score]</a></div>
+<div style="clear: both;"></div>
+</div>
+<script>
+var sessionid = "{{sessionid}}";
+var csvlink = "/results/{{sessionid}}/files/{{csvfile}}";
+var fastalink = "/results/{{sessionid}}/files/sequences.fasta";
+var msafastalink = "/results/{{sessionid}}/files/sequences_aln.fasta";
+var msaviewlink = "/msaview?id={{sessionid}}";
+var flagFasta = "{{flags.fasta}}";
+var flagMSA = "{{flags.msa}}";
+</script>
+</body>
+</html>

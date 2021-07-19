@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<title>Selenzyme | Home</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='resources/css/style_form.css') }}">
+<script src="{{url_for('static', filename='vendors/jquery/jquery-3.1.1.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendors/jquery-ui-1.12.1.base/jquery-ui.css')}}"></link>
+<script src="{{url_for('static', filename='vendors/jquery-ui-1.12.1.base/jquery-ui.js')}}"></script>
+<script src="{{url_for('static', filename='resources/js/form.js')}}"></script>
+</head>
+<body>
+  <div class="mainframe">
+<!--
+  <div class="logo">
+    <center>
+    <img src="{{url_for('static', filename='resources/png/SYNBIOCHEM.png')}}" alt='SYNBIOCHEM' width="50"/> <br />
+    SYNBIOCHEM <b>Selenzyme</b><br/>
+    Enzyme Selection Tool <p />
+    </center>
+    <div class="validate">
+      Status: <span class="status">No reaction.</span>
+      </div>
+  </div>
+-->
+
+	<div class="input">
+	<h1><img src="{{url_for('static', filename='resources/png/SYNBIOCHEM.png')}}" alt='SYNBIOCHEM' width="40"/>
+Selenzyme: Enzyme Selection Tool</h1>
+	<fieldset>
+	<legend>Select reaction</legend> 
+	<div class="reaction">
+	<form action="uploader" method="POST" enctype = "multipart/form-data" id="front">
+	  <div class="rquery">
+	    <div class="panel">
+	    Upload reaction [RXN, SMILES]: <input type="file" name="file" id="rxn" />
+	  <br/>
+	    Input reaction [SMILES, SMARTS]: <input type="text" name="smarts" id="smarts"/>
+	  </div>
+	    <div class="panel">
+	    Select from database <select name="rdb" id="rbd">
+	      <option value="bigg">BiGG</option>
+	      <option value="biopath">BioPath</option>
+	      <option value="brenda">Brenda</option>
+	      <option value="ec" selected="selected">EC number</option>
+	      <option value="kegg">Kegg</option>
+	      <option value="metacyc">MetaCyc</option>
+	      <option value="mnx">MetaNetX</option>
+	      <option value="reactome">Reactome</option>
+	      <option value="rhea">Rhea</option>
+	      <option value="sabiork">Sabio-RK</option>
+	      <option value="seed">The Seed</option>
+	      <option value="upa">UniPathway</option>
+	    </select>
+	    Reaction id: <input type="text" name="rxnid" id="rxnid"/>
+	  <br/>
+	  </div>
+	  </div>
+	  <div class="Info1"> 
+	    <center><img src="{{url_for('static', filename='resources/gif/FhHRx.gif')}}"/> </center>
+	    <center><span class="Message">Uploading...</span></center>
+	  </div>
+
+	  <div style="clear:both" />
+	  	  <div class="validate">
+	    Status: <span class="status">No reaction.</span>
+	  </div>
+
+	</form>
+	</div>
+	</fieldset>
+	<fieldset>
+	<legend>Options</legend>
+	<div class="options ui-corner-all">
+	  <div class="opt">
+	  <form action="results" method="POST" id="options">
+<!--		Retrieve table [csv]: <input type="file" name="csv"/><br/> -->
+		 Maximum number of hits: <input type="number" name="targets" value="50"/> <br/>
+		<input type="checkbox" name="direction"/> Use only consensus reaction direction.<br/>
+		<input type="checkbox" name="noMSA" checked/> No MSA (faster). <br/>
+		Host organism: <select name="host" id="host">
+		  <option value="83333">Escherichia coli K-12</option>
+		  <option value="4932">Saccharomyces cerevisiae</option>
+		  </select><br/>
+		Reaction similarity: <select name="finger" id="finger">
+		  {% for item in fingerprints %}
+		  <option value="{{ item }}">{{ item }}</option>
+		  {% endfor %}
+		  </select>
+		<input type="submit" style="float:right;" value="Submit" id="upload" disabled="disabled" />
+		<div style="clear: both;"></div>
+	  </div>
+	  <div class="Info2"> 
+	    <center><img src="{{url_for('static', filename='resources/gif/FhHRx.gif')}}"/></center>
+	    <center<<span class="Message">Selecting enzymes...</span></center>
+	  </div>
+	  <div style="clear:both" />
+
+
+	</form>
+	</div>
+         </fieldset>
+	<fieldset>
+	  <legend>Help</legend>
+	  <div class="info">
+		  <ul>
+		  <li><b>Input:</b> a reaction in <a href="https://en.wikipedia.org/wiki/Chemical_table_file">RXN</a> or <a href="https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system">SMILES/SMARTS (SMIRKS)</a> format. Usage examples:</li>
+		  <ul>
+		    <li> Sketch the reaction using a chemical editor, copy it as SMILES and paste on the input box. <div>Example: <a href="https://en.wikipedia.org/wiki/Aspartate_transaminase">Aspartate aminotransferase (ATS), EC 2.6.6.1</a>. <div class="example"><tt>O=C([O-])CCC(=O)C(=O)[O-].NC(CC(=O)[O-])C(=O)O>>O=C([O-])CC(=O)C(=O)[O-].NC(CCC(=O)[O-])C(=O)O</tt></div></div>
+</li>
+                     <li> Starting from a reaction in a database like <a href="http://www.genome.jp/kegg/">KEGG</a>, <a href="https://metacyc.org/">MetaCyc</a>, <a href="http://biochem4j.org">biochem4j</a>, <a href="http://www.brenda-enzymes.org/">Brenda</a>, etc, navigate to <a href="http://www.rhea-db.org/">Rhea</a>. Locate the <em>[Rhea ID]</em> of the reaction in the forward direction, download the corresponding RXN file in the following URL: <em>http://www.rhea-db.org/rest/1.0/ws/reaction/rxn/[Rhea ID]</em>.</li>
+		     <li> Select the reaction using an external database identifier: 
+		       <a href="http://bigg.ucsd.edu" target="_blank">BiGG</a>,
+		       <a href="http://www.molecular-networks.com/biopath" target="_blank">BioPath</a>,
+		       <a href="https://www.brenda-enzymes.org/" target="_blank">Brenda</a>,
+		       <a href="http://enzyme.expasy.org" target="_blank">EC number</a>,
+		       <a href="http://www.kegg.jp" target="_blank">Kegg</a>,		       
+		       <a href="http://metacyc.org" target="_blank">MetaCyc</a>,
+		       <a href="http://www.metanetx.org/" target="_blank">MetaNetX</a>,
+		       <a href="http://www.reactome.org" target="_blank">Reactome</a>,
+		       <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>,
+		       <a href="http://sabio.h-its.org" target="_blank">Sabio-RK</a>,
+		       <a href="http://www.theseed.org" target="_blank">The SEED</a>,
+		       <a href="http://www.unipathway.org" target="_blank">UniPathway</a>.
+		    </ul>
+		  <li><b>Options:</b></li>
+		  <ul>
+		    <li> <b>Hits:</b> Number of hits to show.</li>
+		    <li> <b>MSA:</b> Perform multiple sequence alignment and compute conservation score.</li>
+		    <li> <b>Host organism:</b> Compute phylogenetic distance of source organisms to selected host.</li>
+		    <li> <b>Similarity:</b> Select method for reaction similarity (see about <a href="http://rdkit.readthedocs.io/en/latest/GettingStartedInPython.html" target="_blank">fingerprints</a>).</li>
+		    </ul>
+		  <li><b>REST service:</b></li>
+		  <ul>
+		    <li>The base URL for the API is <a href="http://selenzyme.synbiochem.co.uk/REST">selenzyme.synbiochem.co.uk/REST</a></li>
+		    <li><b>POST Query</b></li>
+		    <table class="restinfo">
+		      <tr>
+			<th>Postdata</th>
+			<th>Description</th>
+		      </tr>
+		      <tr>
+			<td>
+			  smarts
+			</td>
+			<td>
+			  Reaction smarts (if no external database identifier is provided).
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  db
+			</td>
+			<td>
+			 External database source: bigg, biopath, brenda, ec, kegg, metacyc, mnx, reactome, rhea, sabiork, seed, upa.
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  rxnid
+			</td>
+			<td>
+			  Reaction identifier for the external database.
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  targets
+			</td>
+			<td>
+			  Maximum number of hits (default: 50).
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  direction
+			</td>
+			<td>
+			  Use only consensus reaction direction (default: 0).
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  noMSA
+			</td>
+			<td>
+			  Do not compute multiple sequence alignment (default: True).
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  host
+			</td>
+			<td>
+			  NCBI taxonomic id of host organism (default: 83333).
+			</td>
+		      </tr>
+		      <tr>
+			<td>
+			  fp
+			</td>
+			<td>
+			  reaction similiarity fingerprint: RDK, Pattern, Morgan (default: RDK).
+			</td>
+		      </tr>
+
+
+		     </table>
+	
+		  </ul>
+		  </ul>
+		  Contact: <a href="mailto:pablo.carbonell@manchester.ac.uk">Pablo Carbonell</a>, SYNBIOCHEM.
+	    <div>
+	  </fieldset>
+	<div class="canvas"><img /></div>
+	<div class="foot">
+	</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+# packages in environment at /home/pablo/anaconda2/envs/lvp3:
+#
+anaconda-client           1.5.1                    py35_0  
+aniso8601                 1.2.1                     <pip>
+biopython                 1.70                np111py35_0    conda-forge
+boost                     1.56.0                   py35_3    rdkit
+bzip2                     1.0.6                         1    conda-forge
+cairo                     1.12.18                       6  
+click                     6.7                      py35_0    conda-forge
+clyent                    1.2.2                    py35_0  
+cobra                     0.4.0                    py35_0    bioconda
+cycler                    0.10.0                   py35_0  
+decorator                 4.0.10                   py35_0  
+flask                     0.12                     py35_0    conda-forge
+Flask-RESTful             0.3.5                     <pip>
+fontconfig                2.11.1                        6  
+freetype                  2.5.5                         1  
+glib                      2.43.0                        1  
+glpk                      4.57                          0    bioconda
+gunicorn                  19.7.1                   py35_0    conda-forge
+harfbuzz                  0.9.39                        1  
+ipython                   5.1.0                    py35_0  
+ipython_genutils          0.1.0                    py35_0  
+itsdangerous              0.24                     py35_1    conda-forge
+jinja2                    2.9.5                    py35_0    conda-forge
+jpeg                      9b                            0    conda-forge
+libffi                    3.2.1                         0  
+libgcc                    5.2.0                         0  
+libgfortran               3.0.0                         1  
+libpng                    1.6.22                        0  
+libtiff                   4.0.6                         7    conda-forge
+libxml2                   2.9.3                         0    bioconda
+libxslt                   1.1.28                        0  
+lxml                      3.6.4                    py35_0  
+markupsafe                0.23                     py35_1    conda-forge
+matplotlib                1.5.1               np111py35_0  
+mkl                       11.3.3                        0  
+mmtf-python               1.0.5                    py35_0    conda-forge
+msgpack-python            0.4.8                    py35_0    conda-forge
+numpy                     1.11.2                   py35_0  
+openssl                   1.0.2h                        1  
+pandas                    0.20.3                   py35_1    conda-forge
+pango                     1.39.0                        1  
+path.py                   8.2.1                    py35_0  
+pexpect                   4.0.1                    py35_0  
+pickleshare               0.7.4                    py35_0  
+pillow                    3.2.0                    py35_1    conda-forge
+pip                       8.1.2                    py35_0  
+pixman                    0.32.6                        0  
+prompt_toolkit            1.0.3                    py35_0  
+ptyprocess                0.5.1                    py35_0  
+pygments                  2.1.3                    py35_0  
+pyparsing                 2.1.4                    py35_0  
+pyqt                      4.11.4                   py35_4  
+python                    3.5.2                         0  
+python-dateutil           2.5.3                    py35_0  
+python-libsbml            5.13.0                   py35_0    SBMLTeam
+pytz                      2016.6.1                 py35_0  
+pyyaml                    3.11                     py35_4  
+qt                        4.8.7                         4  
+rdkit                     2017.03.3           np111py35_1    rdkit
+readline                  6.2                           2  
+reportlab                 3.2.0                    py35_0  
+requests                  2.11.1                   py35_0  
+scipy                     0.18.1              np111py35_0  
+setuptools                26.1.1                   py35_0  
+simplegeneric             0.8.1                    py35_1  
+sip                       4.18                     py35_0  
+six                       1.10.0                   py35_0  
+sqlite                    3.13.0                        0  
+tk                        8.5.18                        0  
+traitlets                 4.3.1                    py35_0  
+wcwidth                   0.1.7                    py35_0  
+werkzeug                  0.11.10                  py35_0    conda-forge
+wheel                     0.29.0                   py35_0  
+xz                        5.2.2                         0  
+yaml                      0.1.6                         0  
+zlib                      1.2.8                         3  

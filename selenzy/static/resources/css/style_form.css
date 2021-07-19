@@ -1,0 +1,82 @@
+body            { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: 12px;}
+a, h1, h2       { color: ##151515; }
+h1, h2          { margin: 5; }
+h1              { border-bottom: 2px solid #eee; }
+
+.mainframe { 
+}
+.logo {
+    float: left;
+    width: 140px;
+    margin: 0x;
+    padding: 5px;
+}
+.input {
+    float: left;
+}
+.canvas {
+}
+.foot {
+    clear: both;
+}
+.reaction {
+}
+.options {
+}
+#host {
+    width: 200px;
+}
+#host option {
+    width: 200px;
+}
+#finger {
+    width: 100px;
+}
+#finger option {
+    width: 100px;
+}
+.info {
+    width: 600px;
+    max-wdith: 600px;
+    display: inline-block;
+}
+.rquery {
+    float: left;
+}
+.Info1 {
+    float: left;
+    visibility: hidden;
+    align: middle;
+}
+.opt {
+    float: left;
+}
+.Info2 {
+    float: left;
+    visibility: hidden;
+    align: middle;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.Message {
+    text-align:center; 
+    font-size: x-small;
+}
+.validate {
+    float: left;
+}
+.status {
+    color: red;
+}
+.example {
+    border-color: lightgray; 
+    border-style: hidden; 
+    border-width: 1px; 
+    font-size: 75%;
+}
+.restinfo table, th, td {
+    border: 1px solid silver;
+}
+.restinfo table {
+    border: 1px solid silver;
+}

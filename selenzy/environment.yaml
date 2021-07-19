@@ -1,0 +1,13 @@
+name: selenzy
+channels:
+  - biobuilds
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python >=3.6,<3.10
+  - biopython
+  - biotools
+  - pandas
+  - rdkit
+  - emboss

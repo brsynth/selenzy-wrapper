@@ -1,0 +1,4 @@
+# Create a copy for production server
+SOURCE../../selenzy
+TARGET=../../selenzypro
+rsync -rua --exclude='.git/' --exclude='uploads/*' --exclude='notes/' --exclude='tools/' $SOURCE/ $TARGET
