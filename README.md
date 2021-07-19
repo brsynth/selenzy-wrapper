@@ -1,6 +1,6 @@
 # selenzy-wrapper - rpSBML wrapper for selenzy tool
 
-## Install
+<!-- ## Install
 ### From Conda
 ```sh
 [sudo] conda install -c brsynth -c chemlite
@@ -63,7 +63,7 @@ Please follow instructions below ti run tests:
 cd tests
 pytest -v
 ```
-For further tests and development tools, a CI toolkit is provided in `ci` folder (see [ci/README.md](ci/README.md)).
+For further tests and development tools, a CI toolkit is provided in `ci` folder (see [ci/README.md](ci/README.md)). -->
 
 
 ## Authors
@@ -76,4 +76,4 @@ For further tests and development tools, a CI toolkit is provided in `ci` folder
 
 
 ## Licence
-chemlite is released under the MIT licence. See the LICENCE file for details.
+selenzy-wrapper is released under the MIT licence. See the LICENCE file for details.
