@@ -10,7 +10,7 @@ from logging import (
 )
 from tempfile import TemporaryDirectory
 from brs_utils import download_and_extract_tar_gz
-from selenzy import (
+from selenzy_wrapper.selenzy import (
     seqScore,
     updateScore,
     readData,
@@ -26,10 +26,7 @@ from .Args import (
 
 __SELENZY_FOLDER = 'selenzy'
 __DATA_URL = 'https://gitlab.com/breakthewall/rrcache-data/-/raw/master/selenzy/data.tar.gz'
-__DATA_FOLDER = os_path.join(
-    __SELENZY_FOLDER,
-    'data'
-)
+__DATA_FOLDER = 'data'
 
 def selenzy_pathway(
     pathway: rpPathway = None,
@@ -41,7 +38,7 @@ def selenzy_pathway(
         logger.info(f'Downloading databases into {__DATA_FOLDER}...')
         download_and_extract_tar_gz(
             __DATA_URL,
-            __SELENZY_FOLDER
+            '.'
         )
     logger.info('Reading databases...')
     pc = readData(__DATA_FOLDER)
