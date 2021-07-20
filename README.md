@@ -1,61 +1,22 @@
 # selenzy-wrapper - rpSBML wrapper for selenzy tool
 
-<!-- ## Install
+## Install
 ### From Conda
 ```sh
-[sudo] conda install -c brsynth -c chemlite
+[sudo] conda install -c brsynth -c conda-forge -c bioconda selenzy_wrapper
+
 ```
 
 ## Use
-### Compound
 ```python
-from chemlite import Compound
+from selenzy_wrapper import selenzy_pathway
 
-c = Compound(id='test_cmpd')
+pathway = rpPathway.from_rpSBML(infile='tests/data/pathway.xml')
+
+selenzy_pathway(pathway=pathway)
+
+pathway.to_rpSBML().write_to_file('selenzy.xml')
 ```
-The code above creates an empty compound. The following fields can be filled and accessed either at build time or later on:
-- smiles
-- inchi
-- inchikey
-- formula
-- name
-- infos
-
-### Reaction
-```python
-from chemlite import Reaction
-
-r = Reaction(id='test_rxn')
-```
-The code above creates an empty reaction. The following fields can be filled and accessed either at build time or later on:
-- ec_numbers
-- reactants
-- products
-- infos
-
-The following methods are also available:
-- `get_smiles()`
-- `add_reactant()`
-- `add_product()`
-
-
-### Pathway
-```python
-from chemlite import Pathway
-
-p = Pathway(id='test_path')
-```
-The code above creates an empty reaction. The following fields can be filled and accessed either at build time or later on:
-- id
-- species
-- reactions
-
-The following methods are also available:
-- `add_compound()`
-- `add_reaction()`
-- `del_reaction()`
-- `Pathway.net_reaction()`
-
 
 ## Tests
 Please follow instructions below ti run tests:
