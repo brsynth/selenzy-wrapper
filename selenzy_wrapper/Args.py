@@ -8,6 +8,8 @@ from typing import(
 )
 from brs_utils import add_logger_args
 
+DEFAULT_NB_TARGETS = 20
+DEFAULT_HOST = '83333'
 
 def build_args_parser(
     prog: str,
@@ -56,7 +58,7 @@ def add_arguments(parser: ArgumentParser) -> ArgumentParser:
     # parser.add_argument('--datadir',
     #                     default=None,
     #                     help='specify data directory for required databases files, please end with slash')
-    parser.add_argument('--nb_targets', type=int, default=20,
+    parser.add_argument('--nb_targets', type=int, default=DEFAULT_NB_TARGETS,
                         help='Number of targets to display in results [default = 20]')
     parser.add_argument('--d', type=float, default=0,
                         help='Use similiarity values for preferred reaction direction only [default=0 (OFF)]')
@@ -64,6 +66,6 @@ def add_arguments(parser: ArgumentParser) -> ArgumentParser:
                         help='Do not compute MSA/conservation scores')
     parser.add_argument('--smarts', action='store_true',
                         help='Input is a reaction SMARTS string')
-    parser.add_argument('--host', type=str, default='83333',
+    parser.add_argument('--host', type=str, default=DEFAULT_HOST,
                         help='Comma separated taxon ids [default: E. coli]')
     return parser
