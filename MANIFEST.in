@@ -1,1 +1,2 @@
+include RELEASE
 graft selenzy_wrapper/selenzy
