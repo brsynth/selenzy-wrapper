@@ -8,6 +8,11 @@
 ```
 
 ## Use
+### CLI
+```
+python -m selenzy_wrapper tests/data/pathway.xml selenzy.xml
+```
+### As a Python module
 ```python
 from selenzy_wrapper import selenzy_pathway
 
