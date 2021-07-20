@@ -10,12 +10,12 @@ from logging import (
 )
 from tempfile import TemporaryDirectory
 from brs_utils import download_and_extract_tar_gz
-from selenzy.Selenzy import (
+from selenzy import (
     seqScore,
     updateScore,
-    readData
+    readData,
+    newtax
 )
-from selenzy.newtax import newtax
 from rptools.rplibs import (
     rpPathway
 )
