@@ -1,5 +1,9 @@
 # Release history
 
+## 0.2.0
+#### Jul 21 2021
+- chore: sort scores by descending order
+
 ## 0.1.1
 #### Jul 20 2021
 - fix: imports
