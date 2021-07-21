@@ -58,6 +58,14 @@ def selenzy_pathway(
                     pc=pc,
                     logger=logger
                 )
+            # Sort descending order
+            _uniprotID_score = dict(
+                sorted(
+                    uniprotID_score.items(),
+                    key=lambda item: item[1],
+                    reverse=True
+                )
+            )
             # uniprotID_score_restricted = {}
             # for uniprot in uniprotID_score:
                 # try:
@@ -65,8 +73,8 @@ def selenzy_pathway(
                 #         uniprotID_score_restricted[uniprot] = uniprotID_score[uniprot]
                 # except KeyError:
                 #     logging.warning('Cannot find the following UNIPROT '+str(uniprot)+' in uniprot_aaLenght')
-            rxn.add_miriam('uniprot', [i for i in uniprotID_score])
-            rxn.set_selenzy_scores(uniprotID_score)
+            rxn.add_miriam('uniprot', [i for i in _uniprotID_score])
+            rxn.set_selenzy_scores(_uniprotID_score)
         except ValueError:
             logger.warning(f'Problem with retreiving the selenzyme information for pathway {pathway.get_id()}')
 
