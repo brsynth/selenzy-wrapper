@@ -48,7 +48,7 @@ def selenzy_pathway(
             with TemporaryDirectory() as tmpOutputFolder:
                 # tmpOutputFolder = f'out_{rxn_id}'
                 # print(rxn_id, rxn.get_smiles())
-                uniprotID_score = Selenzy_score(
+                infos = Selenzy_infos(
                     smarts=True,
                     rxn=rxn.get_smiles(),
                     taxonIDs=taxonIDs,
@@ -59,13 +59,14 @@ def selenzy_pathway(
                     logger=logger
                 )
             # Sort descending order
-            _uniprotID_score = dict(
+            sorted_infos = dict(
                 sorted(
-                    uniprotID_score.items(),
-                    key=lambda item: item[1],
+                    infos.items(),
+                    key=lambda item: item[1]['score'],
                     reverse=True
                 )
             )
+
             # uniprotID_score_restricted = {}
             # for uniprot in uniprotID_score:
                 # try:
@@ -73,13 +74,13 @@ def selenzy_pathway(
                 #         uniprotID_score_restricted[uniprot] = uniprotID_score[uniprot]
                 # except KeyError:
                 #     logging.warning('Cannot find the following UNIPROT '+str(uniprot)+' in uniprot_aaLenght')
-            rxn.add_miriam('uniprot', [i for i in _uniprotID_score])
-            rxn.set_selenzy_scores(_uniprotID_score)
+            rxn.add_miriam('uniprot', [i for i in sorted_infos])
+            rxn.set_selenzy_infos(sorted_infos)
         except ValueError:
             logger.warning(f'Problem with retreiving the selenzyme information for pathway {pathway.get_id()}')
 
 
-def Selenzy_score(
+def Selenzy_infos(
     smarts:  str,
     rxn: str,
     taxonIDs: str,
@@ -90,7 +91,7 @@ def Selenzy_score(
     logger: Logger = getLogger(__name__)
 ) -> Dict:
 
-    uniprotID_score = {}
+    infos = {}
 
     newtax(
         smarts=smarts,
@@ -125,14 +126,46 @@ def Selenzy_score(
         ),
         score
     )
-    for index, row in data.iterrows():
-        print(taxonIDs)
-        uniprotID_score[row['Seq. ID']] = (
-            100.0*row['Rxn Sim.']
-            + 1.0*row['Consv. Score']
-            + (-1.0)*row['Tax. distance']
-            + (-0.1)*row['Uniprot protein evidence']
-    )
+
+    # Split taxon IDs
+    taxonIDs = taxonIDs.split(',')
+
+    # If a single taxon ID is passed,
+    # then return everything
+    if len(taxonIDs) == 1:
+        for index, row in data.iterrows():
+            infos[row['Seq. ID']] = set_infos(
+                score=(
+                100.0*row['Rxn Sim.']
+                + 1.0*row['Consv. Score']
+                + (-1.0)*row['Tax. distance']
+                + (-0.1)*row['Uniprot protein evidence']
+                ),
+                target_id=row['target_ID'],
+                logger=logger
+            )
+    # Otherwise, return only those have
+    # negative taxonomic distance 
+    else:
+        for index, row in data.iterrows():
+            # Ignore the host taxon ID
+            for taxonID in taxonIDs[1:]:
+                # If a negative distance is found,
+                # then store the seqID and
+                # pass to the next line.
+                # Otherwise, check next taxonID distance
+                if row[f'{taxonID}_target_host_dist'] <= 0:
+                    infos[row['Seq. ID']] = set_infos(
+                        score=(
+                        100.0*row['Rxn Sim.']
+                        + 1.0*row['Consv. Score']
+                        + (-1.0)*row['Tax. distance']
+                        + (-0.1)*row['Uniprot protein evidence']
+                        ),
+                        target_id=row['target_ID'],
+                        logger=logger
+                    )
+                    break
 
     # val = json_loads(data.to_json())
     # if 'Seq. ID' in val and len(val['Seq. ID'])>0:
@@ -141,4 +174,16 @@ def Selenzy_score(
     # else:
     #     raise ValueError
 
-    return uniprotID_score
+    return infos
+
+
+def set_infos(
+    score: float,
+    target_id: str,
+    logger: Logger = getLogger(__name__)
+) -> Dict:
+    return  {
+        'score': score,
+        'target_ID': target_id
+    }
+
