@@ -66,6 +66,12 @@ def add_arguments(parser: ArgumentParser) -> ArgumentParser:
                         help='Do not compute MSA/conservation scores')
     parser.add_argument('--smarts', action='store_true',
                         help='Input is a reaction SMARTS string')
-    parser.add_argument('--host', type=str, default=DEFAULT_HOST,
-                        help='Comma separated taxon ids [default: E. coli]')
+    parser.add_argument(
+        '--taxonIDs',
+        type=str,
+        default=DEFAULT_HOST,
+        help='''Comma separated taxon ids [default: 83333 (E. coli K12)].
+                The first taxon ID is the one of the chassis,
+                following ones are taxon IDs of output enzyme sequences'''
+        )
     return parser

@@ -53,7 +53,7 @@ def entry_point():
 
     selenzy_pathway(
         pathway=pathway,
-        host=args.host,
+        taxonIDs=args.taxonIDs,
         nb_targets=args.nb_targets,
         logger=logger
     )

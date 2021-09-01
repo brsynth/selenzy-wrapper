@@ -30,7 +30,7 @@ __DATA_FOLDER = 'data'
 
 def selenzy_pathway(
     pathway: rpPathway = None,
-    host: str = DEFAULT_HOST,
+    taxonIDs: str = DEFAULT_HOST,
     nb_targets: int = DEFAULT_NB_TARGETS,
     logger: Logger = getLogger(__name__)
 ) -> None:
@@ -51,7 +51,7 @@ def selenzy_pathway(
                 uniprotID_score = Selenzy_score(
                     smarts=True,
                     rxn=rxn.get_smiles(),
-                    host=host,
+                    taxonIDs=taxonIDs,
                     datadir=__DATA_FOLDER,
                     outdir=tmpOutputFolder,
                     nb_targets=nb_targets,
@@ -82,7 +82,7 @@ def selenzy_pathway(
 def Selenzy_score(
     smarts:  str,
     rxn: str,
-    host: str,
+    taxonIDs: str,
     datadir: str,
     outdir: str,
     nb_targets: str,
@@ -96,7 +96,7 @@ def Selenzy_score(
         smarts=smarts,
         smartsfile=None,
         rxn=rxn,
-        host=host,
+        host=taxonIDs,
         datadir=datadir,
         outdir=outdir,
         targ=nb_targets,
@@ -126,6 +126,7 @@ def Selenzy_score(
         score
     )
     for index, row in data.iterrows():
+        print(taxonIDs)
         uniprotID_score[row['Seq. ID']] = (
             100.0*row['Rxn Sim.']
             + 1.0*row['Consv. Score']
