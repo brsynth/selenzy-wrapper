@@ -43,8 +43,8 @@ In addition, a final column is generated where the Target ID is indicated.
 """
 import csv
 import pandas as pd
-from . import Selenzy
-from . import Selenzy2
+import Selenzy
+import Selenzy2
 import os
 import argparse
 from typing import (
@@ -121,10 +121,10 @@ def host_analyse(
             host=_host,
             pc=pc
         )
-        df= pd.read_csv(os.path.join(outdir,"result.csv"))
+        data = Selenzy.updateScore(os.path.join(outdir,"result.csv"), Selenzy.seqScore())
         outfile = os.path.join(outdir,'new.csv')
         df2 = Selenzy2.analyse2(
-            df=df,
+            df=data,
             host=host,
             taxNodes=taxNodes,
             datadir=datadir,
@@ -133,26 +133,55 @@ def host_analyse(
 
 def arguments():
     parser = argparse.ArgumentParser(description="""Run Selenzyme for multiple hosts.""")
-    parser.add_argument('rxn', 
-                        help='Input reaction [default = rxn file]')
-    parser.add_argument('-tar', type=float, default=20,
-                        help='Number of targets to display in results [default = 20]')
-    parser.add_argument('-d', type=float, default=0,
-                        help='Use similiarity values for preferred reaction direction only [default=0 (OFF)]')
-    parser.add_argument('datadir',
-                        help='specify data directory for required databases files, please end with slash')
-    parser.add_argument('outdir',
-                        help='specify output directory for all output files, including final CSV file, please end with slash')
-    parser.add_argument('-outfile',
-                        help='specify non-default name for CSV file output')
-    parser.add_argument('-NoMSA', action='store_true',
-                        help='Do not compute MSA/conservation scores')
-    parser.add_argument('-smarts', action='store_true',
-                        help='Input is a reaction SMARTS string')
-    parser.add_argument('-smartsfile', action='store_true',
-                        help='Input is a reaction SMARTS file')
-    parser.add_argument('-host', type=str, default='83333',
-                        help='Comma separated taxon ids [default: E. coli]')
+    parser.add_argument(
+        'rxn', 
+        help='Input reaction [default = rxn file]'
+    )
+    parser.add_argument(
+        '-tar',
+        type=float,
+        default=20,
+        help='Number of targets to display in results [default = 20]'
+        )
+    parser.add_argument(
+        '-d',
+        type=float,
+        default=0,
+        help='Use similiarity values for preferred reaction direction only [default=0 (OFF)]'
+    )
+    parser.add_argument(
+        'datadir',
+        help='specify data directory for required databases files, please end with slash'
+    )
+    parser.add_argument(
+        'outdir',
+        help='specify output directory for all output files, including final CSV file, please end with slash'
+    )
+    parser.add_argument(
+        '-outfile',
+        help='specify non-default name for CSV file output'
+    )
+    parser.add_argument(
+        '-NoMSA',
+        action='store_true',
+        help='Do not compute MSA/conservation scores'
+    )
+    parser.add_argument(
+        '-smarts',
+        action='store_true',
+        help='Input is a reaction SMARTS string'
+    )
+    parser.add_argument(
+        '-smartsfile',
+        action='store_true',
+        help='Input is a reaction SMARTS file'
+    )
+    parser.add_argument(
+        '-host',
+        type=str,
+        default='83333',
+        help='Comma separated taxon ids [default: E. coli]'
+    )
     arg = parser.parse_args()
     return arg
 

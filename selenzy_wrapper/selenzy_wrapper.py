@@ -1,5 +1,9 @@
+from sys import (
+    path as sys_path,
+)
 from os import (
     path as os_path,
+    getcwd as os_getcwd
 )
 from typing import (
     Dict
@@ -9,13 +13,8 @@ from logging import (
     getLogger
 )
 from tempfile import TemporaryDirectory
+from pandas import read_csv as pd_read_csv
 from brs_utils import download_and_extract_tar_gz
-from selenzy_wrapper.selenzy import (
-    seqScore,
-    updateScore,
-    readData,
-    newtax
-)
 from rptools.rplibs import (
     rpPathway
 )
@@ -23,6 +22,17 @@ from .Args import (
     DEFAULT_NB_TARGETS,
     DEFAULT_HOST
 )
+sys_path.insert(
+    0,
+    os_path.join(
+        os_getcwd(),
+        'selenzy_wrapper',
+        'selenzy'
+    )
+)
+from Selenzy import readData
+from newtax import newtax
+
 
 __SELENZY_FOLDER = 'selenzy'
 __DATA_URL = 'https://gitlab.com/breakthewall/rrcache-data/-/raw/master/selenzy/data.tar.gz'
@@ -118,54 +128,49 @@ def Selenzy_infos(
     #             + (-0.1)*row['Uniprot protein evidence']
     #         )
 
-    score = seqScore()
-    data = updateScore(
-        os_path.join(
-            outdir,
-            'new.csv'
-        ),
-        score
-    )
+    # score = seqScore()
+    # data = updateScore(
+    #     os_path.join(
+    #         outdir,
+    #         'new.csv'
+    #     ),
+    #     score
+    # )
 
     # Split taxon IDs
     taxonIDs = taxonIDs.split(',')
 
-    # If a single taxon ID is passed,
-    # then return everything
-    if len(taxonIDs) == 1:
-        for index, row in data.iterrows():
-            infos[row['Seq. ID']] = set_infos(
-                score=(
-                100.0*row['Rxn Sim.']
-                + 1.0*row['Consv. Score']
-                + (-1.0)*row['Tax. distance']
-                + (-0.1)*row['Uniprot protein evidence']
-                ),
-                target_id=row['target_ID'],
-                logger=logger
-            )
-    # Otherwise, return only those have
-    # negative taxonomic distance 
-    else:
-        for index, row in data.iterrows():
-            # Ignore the host taxon ID
-            for taxonID in taxonIDs[1:]:
-                # If a negative distance is found,
-                # then store the seqID and
-                # pass to the next line.
-                # Otherwise, check next taxonID distance
-                if row[f'{taxonID}_target_host_dist'] <= 0:
-                    infos[row['Seq. ID']] = set_infos(
-                        score=(
-                        100.0*row['Rxn Sim.']
-                        + 1.0*row['Consv. Score']
-                        + (-1.0)*row['Tax. distance']
-                        + (-0.1)*row['Uniprot protein evidence']
-                        ),
-                        target_id=row['target_ID'],
-                        logger=logger
-                    )
-                    break
+    with open(os_path.join(
+            outdir,
+            'new.csv'
+        )) as csv_file:
+        df = pd_read_csv(csv_file, delimiter=',')
+        # If a single taxon ID is passed,
+        # then return everything
+        if len(taxonIDs) == 1:
+            for index, row in df.iterrows():
+                infos[row['Seq. ID']] = set_infos(
+                    score=row['Score'],
+                    target_id=row['target_ID'],
+                    logger=logger
+                )
+        # Otherwise, return only those have
+        # negative taxonomic distance 
+        else:
+            for index, row in df.iterrows():
+                # Ignore the host taxon ID
+                for taxonID in taxonIDs[1:]:
+                    # If a negative distance is found,
+                    # then store the seqID and
+                    # pass to the next line.
+                    # Otherwise, check next taxonID distance
+                    if row[f'{taxonID}_target_host_dist'] <= 0:
+                        infos[row['Seq. ID']] = set_infos(
+                            score=row['Score'],
+                            target_id=row['target_ID'],
+                            logger=logger
+                        )
+                        break
 
     # val = json_loads(data.to_json())
     # if 'Seq. ID' in val and len(val['Seq. ID'])>0:
