@@ -34,12 +34,6 @@ check: ## Test code with 'pytest', this is the fastest way to test the code
 test: ## Test code with 'pytest', this is the fastest way to test the code
 	   @$(MAKE_CMD) -f test.mk test args="$(args)"
 
-doc:
-	   @$(MAKE_CMD) -f doc.mk doc args="$(args)"
-
-doc-sphinx-html:
-	cd ../docs ; make html
-
 %-inconda: ## Test conda package
 ifneq ($(strip $(env)),)
 	$(eval env=${PACKAGE}_$*)
@@ -71,11 +65,11 @@ conda-check-recipe: ## Check conda recipe
 conda-create-run_env: ## Make an conda environment to run program
 	@$(MAKE_CMD) -f conda.mk check-environment-test env=${PACKAGE}_test
 
-# conda-doc-init:
-# 	@$(MAKE_CMD) -f conda.mk conda-doc-init env=$(env)
+doc-pdoc:
+	cd .. ; rm -rf chemlite/__pycache__ ; pdoc --force --html -o docs chemlite
+
+doc-sphinx:
+	cd .. ; sphinx-apidoc -f -o docs/source chemlite
 	
-# conda-doc:
-# 	@$(MAKE_CMD) -f conda.mk conda-doc env=$(env)
-	
-# conda-doc-html:
-# 	@$(MAKE_CMD) -f conda.mk conda-doc-html env=$(env)
+doc-sphinx-html:
+	cd ../docs ; make html

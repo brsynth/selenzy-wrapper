@@ -25,7 +25,7 @@ help-advanced: ## Advanced help.
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 CONDA_BUILD_ARGS = --quiet --numpy 1.11
 MAKE_CMD = $(MAKE) -s --no-print-directory
-ECHO = echo -n ">>>"
+ECHO = echo ">>>"
 
 clean: conda-clean-build
 
@@ -152,10 +152,6 @@ check-conda-build:
 ifeq (False,$(HAS_CONDA_BUILD))
 	echo conda env -n $(PACKAGE)_build create -f ../../recipe/conda_build_env.yaml
 endif
-check-conda-doc:
-ifeq (False,$(HAS_CONDA_BUILD))
-	echo conda env -n $(PACKAGE)_doc create -f ../../docs/environment.yml
-endif
 
 ## Check anaconda-client
 ifeq (,$(shell which anaconda))
@@ -182,18 +178,15 @@ endif
 build_env_file := ../../recipe/conda_build_env.yaml
 check_env_file := ../test/check-environment.yml
 test_env_file  := $(tmpdir)/$(shell mktemp -u XXXXXX-${PACKAGE}_test_env.yml)
-doc_env_file := ../../docs/environment.yml
 build_env_file:
 	@
 check_env_file:
-	@
-doc_env_file:
 	@
 test_env_file: check-pyyaml
 	@python3 ../$(TEST_PATH)/parse_recipe.py req > $(test_env_file)
 check-environment-%: check-conda %_env_file
 ifneq ("$(wildcard $(MY_ENV_DIR))","") # check if the directory is there
-		@$(ECHO) "'$(env)' environment already exists.\n"
+		@$(ECHO) "'$(env)' environment already exists."
 else
 		@$(ECHO) "Creating '$(env)' environment... "
 		@conda env create -n $(env) -f $($(*)_env_file) > /dev/null
