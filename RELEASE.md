@@ -1,5 +1,9 @@
 # Release history
 
+## 0.4.0
+#### Sep 5 2021
+- feat: update to new version of selenzy (results with same order)
+
 ## 0.3.0
 #### Sep 1 2021
 - feat: add infos to store (score, target_id)
