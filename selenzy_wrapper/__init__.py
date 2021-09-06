@@ -1,1 +1,0 @@
-from selenzy_wrapper.selenzy_wrapper import selenzy_pathway

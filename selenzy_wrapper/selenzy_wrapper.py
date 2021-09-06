@@ -25,13 +25,14 @@ from .Args import (
 sys_path.insert(
     0,
     os_path.join(
-        os_getcwd(),
-        'selenzy_wrapper',
+        os_path.dirname(
+            os_path.abspath(__file__)
+        ),
         'selenzy'
     )
 )
-from Selenzy import readData
-from newtax import newtax
+from .selenzy.Selenzy import readData
+from .selenzy.newtax import newtax
 
 
 __SELENZY_FOLDER = 'selenzy'
