@@ -3,7 +3,6 @@ from sys import (
 )
 from os import (
     path as os_path,
-    getcwd as os_getcwd
 )
 from typing import (
     Dict
@@ -22,20 +21,20 @@ from .Args import (
     DEFAULT_NB_TARGETS,
     DEFAULT_HOST
 )
+__SELENZY_FOLDER = 'selenzy'
 sys_path.insert(
     0,
     os_path.join(
         os_path.dirname(
             os_path.abspath(__file__)
         ),
-        'selenzy'
+        __SELENZY_FOLDER
     )
 )
 from .selenzy.Selenzy import readData
 from .selenzy.newtax import newtax
 
 
-__SELENZY_FOLDER = 'selenzy'
 __DATA_URL = 'https://gitlab.com/breakthewall/rrcache-data/-/raw/master/selenzy/data.tar.gz'
 __DATA_FOLDER = 'data'
 
