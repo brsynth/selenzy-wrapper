@@ -3,9 +3,6 @@ from typing import (
     Callable,
 )
 from selenzy_wrapper._version import __version__
-from typing import(
-    Callable,
-)
 from brs_utils import add_logger_args
 
 DEFAULT_NB_TARGETS = 20
