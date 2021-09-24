@@ -1,5 +1,9 @@
 # Release history
 
+## 0.5.0
+#### Sep 24 2021
+- fix: chage downloaded 'data' folder location
+
 ## 0.4.0
 #### Sep 5 2021
 - feat: update to new version of selenzy (results with same order)
