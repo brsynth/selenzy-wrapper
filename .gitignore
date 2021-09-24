@@ -1,5 +1,6 @@
 # Specific
 _exclude_*
+data
 
 # Generic
 __pycache__
@@ -8,4 +9,4 @@ package.json
 package-lock.json
 node_modules
 .vscode
-data
+.coverage*
