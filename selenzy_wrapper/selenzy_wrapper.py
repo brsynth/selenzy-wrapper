@@ -21,13 +21,14 @@ from .Args import (
     DEFAULT_NB_TARGETS,
     DEFAULT_HOST
 )
+__PACKAGE_FOLDER = os_path.dirname(
+    os_path.realpath(__file__)
+)
 __SELENZY_FOLDER = 'selenzy'
 sys_path.insert(
     0,
     os_path.join(
-        os_path.dirname(
-            os_path.abspath(__file__)
-        ),
+        __PACKAGE_FOLDER,
         __SELENZY_FOLDER
     )
 )
@@ -36,7 +37,10 @@ from .selenzy.newtax import newtax
 
 
 __DATA_URL = 'https://gitlab.com/breakthewall/rrcache-data/-/raw/master/selenzy/data.tar.gz'
-__DATA_FOLDER = 'data'
+__DATA_FOLDER = os_path.join(
+    __PACKAGE_FOLDER,
+    'data'
+)
 
 def selenzy_pathway(
     pathway: rpPathway = None,
