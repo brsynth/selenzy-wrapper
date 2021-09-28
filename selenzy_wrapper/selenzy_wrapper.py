@@ -52,7 +52,7 @@ def selenzy_pathway(
         logger.info(f'Downloading databases into {__DATA_FOLDER}...')
         download_and_extract_tar_gz(
             __DATA_URL,
-            '.'
+            __DATA_FOLDER
         )
     logger.info('Reading databases...')
     pc = readData(__DATA_FOLDER)
