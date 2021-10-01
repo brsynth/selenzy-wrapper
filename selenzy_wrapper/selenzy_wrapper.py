@@ -72,6 +72,8 @@ def selenzy_pathway(
                     pc=pc,
                     logger=logger
                 )
+            for info in infos:
+                infos[info]['score'] = round(infos[info]['score'], 3)
             # Sort descending order
             sorted_infos = dict(
                 sorted(
