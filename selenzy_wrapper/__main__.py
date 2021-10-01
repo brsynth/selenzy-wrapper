@@ -28,7 +28,7 @@ def init(
     logger = create_logger(parser.prog, args.log)
 
     logger.info(
-        '{color}{typo}rptools {version}{rst}{color} ({prog}){rst}\n'.format(
+        '{color}{typo}{prog} {version}{rst}{color}{rst}\n'.format(
             prog = logger.name,
             version = __version__,
             color=fg('white'),
