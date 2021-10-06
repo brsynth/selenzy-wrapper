@@ -189,13 +189,16 @@ def readTaxonomy(datadir, fileLineage):
     return tax
 
 def taxDistance(tax, host, target):
-    if host in tax and target in tax:
+    if host not in tax:
+        return 100 # no host, no clue
+    else:
         hostLineage = set(tax[host])
+    if target not in tax:
+        distance = 1 + 2*len(hostLineage)
+    else:
         targetLineage = set(tax[target])
         distance = 1 + len(hostLineage ^ targetLineage)
-        return distance
-    else:
-        return '-'
+    return distance
 
 def seqScore(newscore=None):
     import string
@@ -948,7 +951,7 @@ def analyse(rxnInput, targ, datadir, outdir, csvfilename, pdir=0, host='83333', 
                 if y in seqorg:
                     tdist[org] = taxDistance(tax, host, seqorg[y][0])
                 else:
-                    tdist[org] = '-'
+                    tdist[org] = taxDistance(tax, host, '-') # no clue about the target
 
             rows.append( (y, desc, org, tdist[org], mnx, ecid, ext, conservation, rxnsim, rxndirused, rxndirpref, h, e, t, c, w, i, pol, Smiles, mnxSmiles) )
 

@@ -30,7 +30,7 @@ def taxDistsance2021(taxNodes, host, target):
             vector2 = [distance2, distanciaHostAnc,distanciaTargetAnc]
             return vector2
     else:
-        vector3=['-','-','-']
+        vector3=[100,100,100]
         return vector3
 def analyse2(df,host,taxNodes,datadir,outfile = None):
     fileSeqOrg = "seq_org.tsv"
