@@ -1,8 +1,17 @@
 # Release history
 
+## 0.5.2
+#### Oct 6 2021
+- fix: handle missing organism
+
+## 0.5.1
+#### Oct 1 2021
+- fix: change program name
+- chore: round selenzy score
+
 ## 0.5.0
 #### Sep 24 2021
-- fix: chage downloaded 'data' folder location
+- fix: change downloaded 'data' folder location
 
 ## 0.4.0
 #### Sep 5 2021
