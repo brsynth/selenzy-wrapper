@@ -1,6 +1,6 @@
 # Specific
 _exclude_*
-data
+selenzy_wrapper/data
 
 # Generic
 __pycache__
