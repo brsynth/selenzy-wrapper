@@ -170,7 +170,7 @@ def Selenzy_infos(
                     # then store the seqID and
                     # pass to the next line.
                     # Otherwise, check next taxonID distance
-                    if row[f'{taxonID}_target_host_dist'] <= 0:
+                    if float(row[f'{taxonID}_target_host_dist']) <= 0:
                         infos[row['Seq. ID']] = set_infos(
                             score=row['Score'],
                             target_id=row['target_ID'],
