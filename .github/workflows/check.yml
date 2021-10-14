@@ -7,18 +7,10 @@ on:
 
   push:
     branches: [ main, master, dev ]
-    paths-ignore:
-      - '**/RELEASE*'
-      - '**/README*'
-      - '**/LICENSE*'
-      - 'recipe'
-      - 'docs'
-      - '.gitignore'
-      - '.github'
-      - '!.github/workflows/check*'
-      - '**/_version.py'
+    paths:
+      - '**.py'
   pull_request:
-    branches: [ master ]
+    branches: [ main, master ]
 
 jobs:
 
@@ -39,4 +31,5 @@ jobs:
     - name: Checking package
       run: |
         cd ci
-        make check-inconda
+        make check-buildenv env=check
+        conda run -n check make check

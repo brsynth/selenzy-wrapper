@@ -1,0 +1,9 @@
+name: sbml2sbol
+channels:
+  - conda-forge
+dependencies:
+    - biopython=1.77
+    - brs_utils
+    - emboss
+    - python
+    - rptools
