@@ -19,6 +19,7 @@ from rptools.rplibs import (
 )
 from .Args import (
     DEFAULT_NB_TARGETS,
+    DEFAULT_NB_IDS,
     DEFAULT_HOST
 )
 __PACKAGE_FOLDER = os_path.dirname(
@@ -46,6 +47,7 @@ def selenzy_pathway(
     pathway: rpPathway = None,
     taxonIDs: str = DEFAULT_HOST,
     nb_targets: int = DEFAULT_NB_TARGETS,
+    nb_ids: int = DEFAULT_NB_IDS,
     logger: Logger = getLogger(__name__)
 ) -> None:
     if not os_path.exists(__DATA_FOLDER):
@@ -62,7 +64,7 @@ def selenzy_pathway(
             with TemporaryDirectory() as tmpOutputFolder:
                 # tmpOutputFolder = f'out_{rxn_id}'
                 # print(rxn_id, rxn.get_smiles())
-                infos = Selenzy_infos(
+                ids = Selenzy_infos(
                     smarts=True,
                     rxn=rxn.get_smiles(),
                     taxonIDs=taxonIDs,
@@ -72,16 +74,21 @@ def selenzy_pathway(
                     pc=pc,
                     logger=logger
                 )
-            for info in infos:
-                infos[info]['score'] = round(infos[info]['score'], 3)
+
+            # Get only 'nb_ids' values
+            if nb_ids < 0:
+                nb_ids = len(ids)
             # Sort descending order
-            sorted_infos = dict(
+            sorted_ids = dict(
                 sorted(
-                    infos.items(),
+                    ids.items(),
                     key=lambda item: item[1]['score'],
                     reverse=True
-                )
+                )[:nb_ids]
             )
+            # Round the value
+            for id in sorted_ids:
+                sorted_ids[id]['score'] = round(sorted_ids[id]['score'], 3)
 
             # uniprotID_score_restricted = {}
             # for uniprot in uniprotID_score:
@@ -90,8 +97,8 @@ def selenzy_pathway(
                 #         uniprotID_score_restricted[uniprot] = uniprotID_score[uniprot]
                 # except KeyError:
                 #     logging.warning('Cannot find the following UNIPROT '+str(uniprot)+' in uniprot_aaLenght')
-            rxn.add_miriam('uniprot', [i for i in sorted_infos])
-            rxn.set_selenzy_infos(sorted_infos)
+            rxn.add_miriam('uniprot', [i for i in sorted_ids])
+            rxn.set_selenzy_infos(sorted_ids)
         except ValueError:
             logger.warning(f'Problem with retreiving the selenzyme information for pathway {pathway.get_id()}')
 

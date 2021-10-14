@@ -55,6 +55,7 @@ def entry_point():
         pathway=pathway,
         taxonIDs=args.taxonIDs,
         nb_targets=args.nb_targets,
+        nb_ids=args.nb_ids,
         logger=logger
     )
 

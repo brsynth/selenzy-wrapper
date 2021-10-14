@@ -6,6 +6,7 @@ from selenzy_wrapper._version import __version__
 from brs_utils import add_logger_args
 
 DEFAULT_NB_TARGETS = 20
+DEFAULT_NB_IDS = -1
 DEFAULT_HOST = '83333'
 
 def build_args_parser(
@@ -48,21 +49,45 @@ def _add_arguments(parser: ArgumentParser) -> ArgumentParser:
     return parser
 
 def add_arguments(parser: ArgumentParser) -> ArgumentParser:
-    parser.add_argument('pathway_file',
-                        help='path to pathway file')
-    parser.add_argument('outfile',
-                        help='specify output file')
+    parser.add_argument(
+        'pathway_file',
+        help='path to pathway file'
+    )
+    parser.add_argument(
+        'outfile',
+        help='specify output file'
+    )
     # parser.add_argument('--datadir',
     #                     default=None,
     #                     help='specify data directory for required databases files, please end with slash')
-    parser.add_argument('--nb_targets', type=int, default=DEFAULT_NB_TARGETS,
-                        help='Number of targets to display in results [default = 20]')
-    parser.add_argument('--d', type=float, default=0,
-                        help='Use similiarity values for preferred reaction direction only [default=0 (OFF)]')
-    parser.add_argument('--NoMSA', action='store_true',
-                        help='Do not compute MSA/conservation scores')
-    parser.add_argument('--smarts', action='store_true',
-                        help='Input is a reaction SMARTS string')
+    parser.add_argument(
+        '--nb_targets',
+        type=int,
+        default=DEFAULT_NB_TARGETS,
+        help='Number of targets to display in results (before taxon IDs filtering) [default = 20]'
+    )
+    parser.add_argument(
+        '--nb_ids',
+        type=int,
+        default=DEFAULT_NB_IDS,
+        help='Number of enzyme IDs to display in results (after taxon IDs filtering) [default = -1 (no limit)]'
+    )
+    parser.add_argument(
+        '--d',
+        type=float,
+        default=0,
+        help='Use similiarity values for preferred reaction direction only [default=0 (OFF)]'
+    )
+    parser.add_argument(
+        '--NoMSA',
+        action='store_true',
+        help='Do not compute MSA/conservation scores'
+    )
+    parser.add_argument(
+        '--smarts',
+        action='store_true',
+        help='Input is a reaction SMARTS string'
+    )
     parser.add_argument(
         '--taxonIDs',
         type=str,
