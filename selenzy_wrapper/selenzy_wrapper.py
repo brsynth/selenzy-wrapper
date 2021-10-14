@@ -102,7 +102,6 @@ def selenzy_pathway(
         except ValueError:
             logger.warning(f'Problem with retreiving the selenzyme information for pathway {pathway.get_id()}')
 
-
 def Selenzy_infos(
     smarts:  str,
     rxn: str,
