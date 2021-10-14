@@ -40,6 +40,7 @@ def init(
 
     return logger
 
+
 def entry_point():
     parser = build_args_parser(
         prog = 'selenzy-wrapper',
