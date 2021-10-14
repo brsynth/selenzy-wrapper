@@ -1,6 +1,8 @@
 name: sbml2sbol
 channels:
   - conda-forge
+  - bioconda
+  - brsynth
 dependencies:
     - biopython=1.77
     - brs_utils
