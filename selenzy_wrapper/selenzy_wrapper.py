@@ -43,6 +43,7 @@ __DATA_FOLDER = os_path.join(
     'data'
 )
 
+
 def selenzy_pathway(
     pathway: rpPathway = None,
     taxonIDs: str = DEFAULT_HOST,
