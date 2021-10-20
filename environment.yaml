@@ -1,11 +1,9 @@
-name: sbml2sbol
+name: selenzy
 channels:
-  - bioconda
-  - brsynth
   - conda-forge
 dependencies:
+    - python >=3.7,<3.10
     - biopython=1.77
     - brs_utils
-    - emboss
-    - python
-    - rptools
+    - bioconda::emboss
+    - brsynth::rptools
