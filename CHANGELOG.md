@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.0.4](https://github.com/brsynth/selenzy-wrapper/tree/0.0.4) (2021-10-20)
+
+[Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.0.3...0.0.4)
+
 ## [0.0.3](https://github.com/brsynth/selenzy-wrapper/tree/0.0.3) (2021-10-15)
 
 [Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.0.1...0.0.3)
