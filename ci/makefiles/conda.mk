@@ -9,13 +9,30 @@ meta := meta.yaml
 build-recipe:
 	echo "{% set name = \"${PACKAGE}\" %}" > $(recipe)/$(meta)
 	cat $(recipe)/_meta1.yaml >> $(recipe)/$(meta)
-	sed -ne '/^dependencies:$$/{:a' -e 'n;p;ba' -e '}' ../../environment.yaml | awk '{print "    - "$$2}' >> $(recipe)/$(meta)
+	$(eval PACKAGES := $(shell sed -ne '/^dependencies:$$/{:a' -e 'n;p;ba' -e '}' ../../environment.yaml | awk '{print $$2}'))
+	for pack in $(PACKAGES); do \
+		echo $$pack \
+			| sed "s/^\(.*\)::\(.*\)$$/\2 \1/" \
+			| awk '{print "    - "$$1}' \
+		>> $(recipe)/$(meta); \
+	done
 	cat $(recipe)/_meta2.yaml >> $(recipe)/$(meta)
 	$(MAKE_CMD) -f test.mk test-deps >> $(recipe)/$(meta)
 	cat $(recipe)/_meta3.yaml >> $(recipe)/$(meta)
 	echo "    - `$(MAKE_CMD) -f test.mk test-cmd`" >> $(recipe)/$(meta)
 	cat $(recipe)/_meta4.yaml >> $(recipe)/$(meta)
-	awk '/channels/,/dependencies/{if(/dependencies|channels/) next; print}' ../../environment.yaml | awk '{print $$2}' > $(recipe)/conda_channels.txt
+	echo > $(recipe)/conda_channels.txt
+	for pack in $(PACKAGES); do \
+		echo $$pack \
+			| sed "s/^\(.*\)::\(.*\)$$/\2 \1/" \
+			| awk '{print $$2}' \
+		>> $(recipe)/conda_channels.txt; \
+	done
+	awk '/channels/,/dependencies/{if(/dependencies|channels/) next; print}' ../../environment.yaml \
+		| awk '{print $$2}' \
+	>> $(recipe)/conda_channels.txt
+	sed -i '' 's/^ *//; s/ *$$//; /^$$/d' $(recipe)/conda_channels.txt
+	sed -i '' -e '/^$$/d' $(recipe)/conda_channels.txt
 
 # HELP
 # This will output the help for each task
@@ -76,7 +93,7 @@ conda-clean-build:
 	@rm -rf ${CONDA_BLD_PATH}/*
 ### Add channels specified in recipe
 conda-add-channel-%:
-	@conda config --quiet --add channels $* > /dev/null
+	@conda run -n $(env) conda config --env --quiet --add channels $* > /dev/null
 ## Check channels
 conda-add-channels:
 	@for channel in $(recipe_channels) ; do \
@@ -92,12 +109,17 @@ endif
 ### build only
 conda-build-only: check-environment-build build-recipe
 	@$(ECHO) "Building conda package... "
-	@conda run --name ${PACKAGE}_build conda build --no-test $(CONDA_BUILD_ARGS) $(VARIANTS) --output-folder ${CONDA_BLD_PATH} $(recipe) > /dev/null \
+	conda run --name ${PACKAGE}_build \
+		conda build \
+			--no-test $(CONDA_BUILD_ARGS) $(VARIANTS) \
+			--output-folder ${CONDA_BLD_PATH} \
+			$(recipe) \
+	# > /dev/null \
 	&& echo OK
 
-conda-test-only: check-environment-build conda-add-channels
+conda-test-only: check-environment-build build-recipe conda-add-channels
 	@$(ECHO) "Testing conda package... "
-	@conda run --name ${PACKAGE}_build conda build --test $(CONDA_BUILD_ARGS) ${CONDA_BLD_PATH}/${PLATFORM}/${PACKAGE}*.tar.bz2 \
+	conda run --name ${PACKAGE}_build conda build --test $(CONDA_BUILD_ARGS) ${CONDA_BLD_PATH}/${PLATFORM}/${PACKAGE}*.tar.bz2 \
 	&& echo OK
 
 ### build+test
@@ -181,7 +203,7 @@ test_env_file  := ../../environment.yaml
 
 
 check-environment-%: check-conda build-environment-%
-	@$(ECHO) OK
+	@
 
 build-environment-%: check-conda
 ifneq ("$(wildcard $(MY_ENV_DIR))","") # check if the directory is there
