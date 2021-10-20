@@ -117,7 +117,7 @@ conda-build-only: check-environment-build build-recipe
 			--no-test $(CONDA_BUILD_ARGS) $(VARIANTS) \
 			--output-folder ${CONDA_BLD_PATH} \
 			$(recipe) \
-	# > /dev/null \
+	> /dev/null \
 	&& echo OK
 
 conda-test-only: check-environment-build build-recipe conda-add-channels
