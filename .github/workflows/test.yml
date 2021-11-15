@@ -33,7 +33,8 @@ jobs:
         with:
           miniconda-version: "latest"
           environment-file: environment.yaml
-          activate-environment: test
+          auto-activate-base: true
+          activate-environment: ""
 
       - name: Running tests
         run: |
