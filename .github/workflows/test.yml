@@ -36,7 +36,10 @@ jobs:
           activate-environment: ""
 
       - name: Building environment
-        run: conda env update --file environment.yaml
+        run: |
+          conda env list
+          conda config --show-sources
+          conda env update --file environment.yaml
 
       - name: Running tests
         run: |

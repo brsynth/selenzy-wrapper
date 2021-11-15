@@ -13,7 +13,6 @@ from rptools.rplibs import (
 )
 from .selenzy_wrapper import selenzy_pathway
 
-
 def init(
     parser: ArgumentParser,
     args: Namespace
