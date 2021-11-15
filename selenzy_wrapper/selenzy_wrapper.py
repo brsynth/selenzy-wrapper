@@ -86,14 +86,14 @@ def selenzy_pathway(
                 ids.items(),
                 key=lambda item: item[1]['score'],
                 reverse=True
-            )[:nb_ids]
+            )[:nb_ids]  # keep only IDs with top scores
         )
 
         # Round the value
         for id in sorted_ids:
             sorted_ids[id]['score'] = round(sorted_ids[id]['score'], 3)
 
-        rxn.add_miriam('uniprot', [i for i in sorted_ids])
+        rxn.add_miriam('uniprot', list(sorted_ids.keys()))
         rxn.set_selenzy_infos(sorted_ids)
         result_ids[rxn_id] = sorted_ids
 
