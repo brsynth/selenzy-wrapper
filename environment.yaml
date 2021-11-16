@@ -1,10 +1,9 @@
 name: selenzy
 channels:
   - conda-forge
-  - bioconda
 dependencies:
     - python >=3.7,<3.10
     - biopython=1.77
     - brs_utils
-    - emboss
+    - bioconda::emboss
     - rptools

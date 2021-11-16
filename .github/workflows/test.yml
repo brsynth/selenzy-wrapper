@@ -37,6 +37,5 @@ jobs:
 
       - name: Running tests
         run: |
-          conda list
           conda install -y python pytest pytest-mock
           python -m pytest
