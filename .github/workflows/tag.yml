@@ -36,6 +36,11 @@ jobs:
         with:
           name: recipe
           path: cicd-toolkit/recipe/meta.yaml
+      - name: Saving conda channels
+        uses: actions/upload-artifact@v2
+        with:
+          name: conda_channels
+          path: cicd-toolkit/recipe/conda_channels.txt
 
   Conda-Build:
     needs: [Build-Recipe]
@@ -66,9 +71,18 @@ jobs:
           miniconda-version: "latest"
           environment-file: cicd-toolkit/recipe/conda_build_env.yaml
           activate-environment: test
-      - name: Building & Testing conda package
+      - name: Loading conda_channels
+        uses: actions/download-artifact@v2
+        with:
+          name: conda_channels
+          path: cicd-toolkit/recipe
+      - name: Updating conda channels
         run: |
-          conda-build cicd-toolkit/recipe
+          for channel in `cat cicd-toolkit/recipe/conda_channels.txt` ; do \
+            conda config --env --quiet --add channels $channel; \
+          done
+      - name: Building & Testing conda package
+        run: conda-build cicd-toolkit/recipe
 
   Tag:
     needs: [Conda-Build]
