@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        os: ["ubuntu"]
+        os: ["ubuntu", "macos"]
     defaults:
       run:
         shell: bash -l {0}
@@ -32,11 +32,11 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           miniconda-version: "latest"
-          auto-activate-base: true
-          activate-environment: ""
+          environment-file: environment.yaml
+          activate-environment: test
 
       - name: Running tests
         run: |
-          conda env update --name test --file environment.yaml
+          conda list
           conda install -y python pytest pytest-mock
           python -m pytest
