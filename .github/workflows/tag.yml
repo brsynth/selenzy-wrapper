@@ -69,7 +69,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           miniconda-version: "latest"
-          environment-file: cicd-toolkit/recipe/conda_build_env.yaml
+          environment-file: cicd-toolkit/conda_envs/build.yaml
           activate-environment: test
       - name: Loading conda_channels
         uses: actions/download-artifact@v2
