@@ -497,7 +497,7 @@ def reactionSmiles(rxnSmilesFile):
 def pepstats(file, outdir):
     outfile = os.path.join(outdir, "results.pepstats")
     args = ("pepstats -sequence {0} -outfile ".format(file) + outfile)
-    os.system(args)
+    os.system(args)# nosec
     
     f = open(outfile, "r")
     
@@ -550,7 +550,7 @@ def garnier(file, outdir):
     outfile = os.path.join(outdir, "garnier.txt")
     
     args = ("garnier -sequence {0} -outfile ".format(fixfile) + outfile)
-    os.system(args)
+    os.system(args)# nosec
     
     f = open(outfile, "r")
 
@@ -616,7 +616,7 @@ def doMSA(finallistfile, outdir):
     align_fasta = os.path.join(outdir, "sequences_aln.fasta")
     treefile = os.path.join(outdir, "sequences.dnd")
     args = ("t_coffee -in {0} -mode quickaln -output=score_ascii,fasta_aln,score_html -outfile ".format(finallistfile) +outfile+ " -newtree "+treefile)
-    os.system(args)
+    os.system(args)# nosec
     if os.path.exists(outfile_html):
         os.rename(outfile_html, align_html)
     if os.path.exists(outfile_aln):

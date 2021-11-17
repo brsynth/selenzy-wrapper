@@ -203,7 +203,7 @@ class RestQuery(Resource):
             try:
                 if isinstance(rxninfo, (list, tuple) ):
                     data = []
-                    for instance in rnxinfo:
+                    for instance in rxninfo:
                         dat, csvfile, sessionid = run_session(rxntype, instance, targets, direction, host, fp, noMSA)
                         data.append(dat)
                     data = pd.DataFrame(data)

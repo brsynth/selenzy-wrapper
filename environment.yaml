@@ -1,10 +1,9 @@
-name: selenzy-dev
+name: selenzy
 channels:
   - conda-forge
 dependencies:
-  - python >=3.7,<3.10
-  - biopython >1.70,<=1.77
-  - brs_utils
-  - emboss
-  - rptools
-  - pytest
+    - python >=3.7,<3.10
+    - biopython >1.70,<=1.77
+    - brs_utils
+    - bioconda::emboss
+    - rptools
