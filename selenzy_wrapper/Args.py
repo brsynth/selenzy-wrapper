@@ -8,6 +8,7 @@ from brs_utils import add_logger_args
 DEFAULT_NB_TARGETS = 20
 DEFAULT_NB_IDS = -1
 DEFAULT_HOST = '83333'
+DEFAULT_MAX_NB_GENES = 5
 
 def build_args_parser(
     prog: str,
@@ -51,11 +52,13 @@ def _add_arguments(parser: ArgumentParser) -> ArgumentParser:
 def add_arguments(parser: ArgumentParser) -> ArgumentParser:
     parser.add_argument(
         'pathway_file',
-        help='path to pathway file'
+        type=str,
+        help='Path to pathway file'
     )
     parser.add_argument(
         'outfile',
-        help='specify output file'
+        type=str,
+        help='Path to output file'
     )
     # parser.add_argument('--datadir',
     #                     default=None,
@@ -65,6 +68,12 @@ def add_arguments(parser: ArgumentParser) -> ArgumentParser:
         type=int,
         default=DEFAULT_NB_TARGETS,
         help='Number of targets to display in results (before taxon IDs filtering) [default = 20]'
+    )
+    parser.add_argument(
+        '--to_csv',
+        type=str,
+        default=None,
+        help='Path to output file where genes IDs will be exported into CSV file'
     )
     parser.add_argument(
         '--nb_ids',
