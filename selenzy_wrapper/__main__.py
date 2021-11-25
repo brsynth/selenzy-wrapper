@@ -73,6 +73,7 @@ def entry_point():
 
     logger.info(f'Results written in file \'{args.outfile}\'')
 
+
 def selenzinfo2table(pathway, maxgenes=DEFAULT_NB_IDS):
     """Convert the selenzyme_info dictionary into the input table: Name, Type, Part, Step
 
