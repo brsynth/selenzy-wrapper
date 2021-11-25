@@ -1,8 +1,16 @@
 # Changelog
 
+## [0.1.0](https://github.com/brsynth/selenzy-wrapper/tree/0.1.0) (2021-11-25)
+
+[Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.0.6...0.1.0)
+
 ## [0.0.6](https://github.com/brsynth/selenzy-wrapper/tree/0.0.6) (2021-11-18)
 
 [Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.0.5...0.0.6)
+
+**Merged pull requests:**
+
+- test\(selenzy-wrapper\) [\#1](https://github.com/brsynth/selenzy-wrapper/pull/1) ([kenza12](https://github.com/kenza12))
 
 ## [0.0.5](https://github.com/brsynth/selenzy-wrapper/tree/0.0.5) (2021-11-17)
 
