@@ -98,11 +98,15 @@ def add_arguments(parser: ArgumentParser) -> ArgumentParser:
         help='Input is a reaction SMARTS string'
     )
     parser.add_argument(
-        '--taxonIDs',
+        '--host_taxID',
         type=str,
         default=DEFAULT_HOST,
-        help='''Comma separated taxon ids [default: 83333 (E. coli K12)].
-                The first taxon ID is the one of the chassis,
-                following ones are taxon IDs of output enzyme sequences'''
-        )
+        help='''Taxon ID of the chassis (default: 83333 [E. coli K12])'''
+    )
+    parser.add_argument(
+        '--enzyme_taxIDs',
+        type=str,
+        default=None,
+        help='''Comma separated taxon IDs of output enzyme sequences'''
+    )
     return parser

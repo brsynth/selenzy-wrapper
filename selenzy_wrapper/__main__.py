@@ -54,9 +54,13 @@ def entry_point():
 
     pathway = rpPathway.from_rpSBML(infile=args.pathway_file)
 
+    taxonIDs = args.host_taxID
+    if args.enzyme_taxIDs is not None:
+        taxonIDs += f',{args.enzyme_taxIDs}'
+
     selenzy_pathway(
         pathway=pathway,
-        taxonIDs=args.taxonIDs,
+        taxonIDs=taxonIDs,
         nb_targets=args.nb_targets,
         nb_ids=args.nb_ids,
         logger=logger

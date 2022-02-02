@@ -21,7 +21,7 @@ def test_output(tmpdir):
             join(tmpdir, "output_test.xml"),
             '--nb_targets', '500',
             '--d', '0.0',
-            '--taxonIDs', '83333',
+            '--host_taxID', '83333',
             '--to_csv', join(tmpdir, "output_test.csv")
         ],
         stdout=subprocess.PIPE
