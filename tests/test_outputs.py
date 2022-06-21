@@ -22,7 +22,8 @@ def test_output(tmpdir):
             '--nb_targets', '500',
             '--d', '0.0',
             '--host_taxID', '83333',
-            '--to_csv', join(tmpdir, "output_test.csv")
+            '--to_csv', join(tmpdir, "output_test.csv"),
+            '--data-path', tmpdir
         ],
         stdout=subprocess.PIPE
     )
