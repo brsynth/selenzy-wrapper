@@ -17,6 +17,7 @@ from brs_utils import download_and_extract_tar_gz
 from rptools.rplibs import (
     rpPathway
 )
+
 from .Args import (
     DEFAULT_NB_TARGETS,
     DEFAULT_NB_IDS,
