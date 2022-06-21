@@ -1,7 +1,11 @@
 from argparse  import ArgumentParser
+from os import (
+    path as os_path,
+)
 from typing import (
     Callable,
 )
+
 from selenzy_wrapper._version import __version__
 from brs_utils import add_logger_args
 
@@ -9,6 +13,11 @@ DEFAULT_NB_TARGETS = 20
 DEFAULT_NB_IDS = -1
 DEFAULT_HOST = '83333'
 DEFAULT_MAX_NB_GENES = 5
+__PACKAGE_FOLDER = os_path.dirname(
+    os_path.realpath(__file__)
+)
+DEFAULT_DATA_FOLDER = __PACKAGE_FOLDER
+
 
 def build_args_parser(
     prog: str,
@@ -108,5 +117,12 @@ def add_arguments(parser: ArgumentParser) -> ArgumentParser:
         type=str,
         default=None,
         help='''Comma separated taxon IDs of output enzyme sequences'''
+    )
+    parser.add_argument(
+        '--data-path',
+        type=str,
+        default=DEFAULT_DATA_FOLDER,
+        help='''Path of the data directory. If does not exist,
+        a 'data' folder will be created (default in package directory)'''
     )
     return parser

@@ -63,6 +63,7 @@ def entry_point():
         taxonIDs=taxonIDs,
         nb_targets=args.nb_targets,
         nb_ids=args.nb_ids,
+        datadir=args.data_path,
         logger=logger
     )
 

@@ -20,10 +20,9 @@ from rptools.rplibs import (
 from .Args import (
     DEFAULT_NB_TARGETS,
     DEFAULT_NB_IDS,
-    DEFAULT_HOST
-)
-__PACKAGE_FOLDER = os_path.dirname(
-    os_path.realpath(__file__)
+    DEFAULT_HOST,
+    DEFAULT_DATA_FOLDER,
+    __PACKAGE_FOLDER
 )
 __SELENZY_FOLDER = 'selenzy'
 sys_path.insert(
@@ -36,29 +35,26 @@ sys_path.insert(
 from .selenzy.Selenzy import readData
 from .selenzy.newtax import newtax
 
-
 __DATA_URL = 'https://gitlab.com/breakthewall/rrcache-data/-/raw/master/selenzy/data.tar.gz'
-__DATA_FOLDER = os_path.join(
-    __PACKAGE_FOLDER,
-    'data'
-)
-
 
 def selenzy_pathway(
     pathway: rpPathway = None,
     taxonIDs: str = DEFAULT_HOST,
     nb_targets: int = DEFAULT_NB_TARGETS,
     nb_ids: int = DEFAULT_NB_IDS,
+    datadir: str = DEFAULT_DATA_FOLDER,
     logger: Logger = getLogger(__name__)
 ) -> Dict:
-    if not os_path.exists(__DATA_FOLDER):
-        logger.info(f'Downloading databases into {__DATA_FOLDER}...')
+
+    datadir_data = os_path.join(datadir, 'data')
+    if not os_path.exists(datadir_data):
+        logger.info(f'Downloading databases into \'{os_path.abspath(datadir)}\'...')
         download_and_extract_tar_gz(
             __DATA_URL,
-            __PACKAGE_FOLDER
+            datadir
         )
-    logger.info('Reading databases...')
-    pc = readData(__DATA_FOLDER)
+    logger.info(f'Reading databases from \'{os_path.abspath(datadir)}\'...')
+    pc = readData(datadir_data)
 
     result_ids = {}
     for rxn_id, rxn in pathway.get_reactions().items():
@@ -68,7 +64,7 @@ def selenzy_pathway(
                     smarts=True,
                     rxn=rxn.get_smiles(),
                     taxonIDs=taxonIDs,
-                    datadir=__DATA_FOLDER,
+                    datadir=datadir_data,
                     outdir=tmpOutputFolder,
                     nb_targets=nb_targets,
                     pc=pc,
