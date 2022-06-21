@@ -37,6 +37,7 @@ from .selenzy.newtax import newtax
 
 __DATA_URL = 'https://gitlab.com/breakthewall/rrcache-data/-/raw/master/selenzy/data.tar.gz'
 
+
 def selenzy_pathway(
     pathway: rpPathway = None,
     taxonIDs: str = DEFAULT_HOST,
