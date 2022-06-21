@@ -9,6 +9,7 @@ from typing import (
 from selenzy_wrapper._version import __version__
 from brs_utils import add_logger_args
 
+
 DEFAULT_NB_TARGETS = 20
 DEFAULT_NB_IDS = -1
 DEFAULT_HOST = '83333'
