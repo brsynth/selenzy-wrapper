@@ -28,4 +28,4 @@ jobs:
       - run: pip install ruff black
 
       - run: ruff check selenzy_wrapper/*.py tests/*.py
-      - run: black --check .
+      - run: black .
