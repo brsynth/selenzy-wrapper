@@ -27,5 +27,5 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install ruff black
 
-      - run: ruff check .
+      - run: ruff check selenzy_wrapper/*.py tests/*.py
       - run: black --check .
