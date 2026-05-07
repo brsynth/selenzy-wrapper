@@ -1,52 +1,39 @@
-from os import (
-    path as os_path,
-)
-from argparse import (
-    ArgumentParser,
-    Namespace
-)
+from argparse import ArgumentParser, Namespace
 from logging import Logger
-from colored import fg, bg, attr
+from colored import fg, attr
 from pandas import DataFrame
-from .Args import (
-    build_args_parser,
-    DEFAULT_NB_IDS
-)
-from rptools.rplibs import (
-    rpPathway
-)
+from .Args import build_args_parser, DEFAULT_NB_IDS
+from rptools.rplibs import rpPathway
 from .selenzy_wrapper import selenzy_pathway
 
-def init(
-    parser: ArgumentParser,
-    args: Namespace
-) -> Logger:
+
+def init(parser: ArgumentParser, args: Namespace) -> Logger:
     from brs_utils import create_logger
     from selenzy_wrapper._version import __version__
 
-    if args.log.lower() in ['silent', 'quiet'] or args.silent:
-        args.log = 'CRITICAL'
+    if args.log.lower() in ["silent", "quiet"] or args.silent:
+        args.log = "CRITICAL"
 
     # Create logger
     logger = create_logger(parser.prog, args.log)
 
     logger.info(
-        '{color}{typo}{prog} {version}{rst}{color}{rst}\n'.format(
-            prog = logger.name,
-            version = __version__,
-            color=fg('white'),
-            typo=attr('bold'),
-            rst=attr('reset')
+        "{color}{typo}{prog} {version}{rst}{color}{rst}\n".format(
+            prog=logger.name,
+            version=__version__,
+            color=fg("white"),
+            typo=attr("bold"),
+            rst=attr("reset"),
         )
     )
     logger.debug(args)
 
     return logger
 
+
 def entry_point():
     parser = build_args_parser(
-        prog = 'selenzy-wrapper',
-        description='rpSBML wrapper for selenzy tool'
+        prog="selenzy-wrapper", description="rpSBML wrapper for selenzy tool"
     )
     args = parser.parse_args()
 
@@ -56,7 +43,7 @@ def entry_point():
 
     taxonIDs = args.host_taxID
     if args.enzyme_taxIDs is not None:
-        taxonIDs += f',{args.enzyme_taxIDs}'
+        taxonIDs += f",{args.enzyme_taxIDs}"
 
     selenzy_pathway(
         pathway=pathway,
@@ -64,19 +51,16 @@ def entry_point():
         nb_targets=args.nb_targets,
         nb_ids=args.nb_ids,
         datadir=args.data_path,
-        logger=logger
+        logger=logger,
     )
 
     pathway.to_rpSBML().write_to_file(args.outfile)
 
     if args.to_csv is not None:
-        genes = selenzinfo2table(
-            pathway=pathway,
-            maxgenes=args.nb_ids
-        )
+        genes = selenzinfo2table(pathway=pathway, maxgenes=args.nb_ids)
         genes.to_csv(args.to_csv, index=False)
 
-    logger.info(f'Results written in file \'{args.outfile}\'')
+    logger.info(f"Results written in file '{args.outfile}'")
 
 
 def selenzinfo2table(pathway, maxgenes=DEFAULT_NB_IDS):
@@ -94,11 +78,9 @@ def selenzinfo2table(pathway, maxgenes=DEFAULT_NB_IDS):
     :return: The table of parts
     """
     selenzyme_info = {
-        rxn.get_id(): rxn.get_selenzy()
-        for rxn in
-        pathway.get_list_of_reactions()
+        rxn.get_id(): rxn.get_selenzy() for rxn in pathway.get_list_of_reactions()
     }
-    genes = DataFrame(columns=['Name','Type', 'Part', 'Step'])
+    genes = DataFrame(columns=["Name", "Type", "Part", "Step"])
     for rxn_id in selenzyme_info:
         nb_genes = 0
         if maxgenes == DEFAULT_NB_IDS or nb_genes < maxgenes:
@@ -106,12 +88,12 @@ def selenzinfo2table(pathway, maxgenes=DEFAULT_NB_IDS):
             for enz_id in selenzyme_info[rxn_id]:
                 genes.loc[len(genes)] = [
                     enz_id,
-                    'gene',
+                    "gene",
                     enz_id,
-                    pathway.get_reaction(rxn_id).get_idx_in_path()
+                    pathway.get_reaction(rxn_id).get_idx_in_path(),
                 ]
     return genes
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     entry_point()

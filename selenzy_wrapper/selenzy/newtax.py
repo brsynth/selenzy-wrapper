@@ -41,8 +41,7 @@ If the host is a set of hosts, the code generates "new.csv", which adds the foll
 - Target/Common ancestor distance
 In addition, a final column is generated where the Target ID is indicated.
 """
-import csv
-import pandas as pd
+
 import Selenzy
 import Selenzy2
 import os
@@ -51,8 +50,9 @@ from typing import (
     List,
 )
 
-fileSeqOrg = "seq_org.tsv" 
+fileSeqOrg = "seq_org.tsv"
 fileLineage = "org_lineage.csv"
+
 
 def newtax(
     smarts: str,
@@ -62,38 +62,30 @@ def newtax(
     datadir: str,
     outdir: str,
     targ: str,
-    pc = None,
+    pc=None,
 ):
     newpath = os.path.join(outdir)
     if not os.path.exists(newpath):
-        os.makedirs(newpath) 
+        os.makedirs(newpath)
     if smarts is not None:
-        rxnInput = ['-smarts', rxn]
+        rxnInput = ["-smarts", rxn]
     elif smartsfile:
-        rxnInput = ['-smartsfile', rxn]
+        rxnInput = ["-smartsfile", rxn]
     else:
-        rxnInput = ['-rxn', rxn]
+        rxnInput = ["-rxn", rxn]
     # Convert host list to array
     host = split_host(host)
     host_analyse(
-        rxnInput=rxnInput,
-        host=host,
-        targ=targ,
-        datadir=datadir,
-        outdir=outdir,
-        pc=pc
+        rxnInput=rxnInput, host=host, targ=targ, datadir=datadir, outdir=outdir, pc=pc
     )
+
 
 def split_host(host: str) -> List[str]:
     return host.split(",")
 
+
 def host_analyse(
-    rxnInput: str,
-    datadir: str,
-    outdir: str,
-    host: str,
-    targ: str,
-    pc = None
+    rxnInput: str, datadir: str, outdir: str, host: str, targ: str, pc=None
 ):
     tax = Selenzy.readTaxonomy(datadir, fileLineage)
     taxNodes = Selenzy2.superTax2(tax)
@@ -105,12 +97,12 @@ def host_analyse(
             outdir=outdir,
             csvfilename="result.csv",
             NoMSA=True,
-            host=host
+            host=host,
         )
     else:
         _host = host[0]
         if _host not in tax:
-            _host = '83333'
+            _host = "83333"
         datos = Selenzy.analyse(
             rxnInput=rxnInput,
             targ=targ,
@@ -119,73 +111,63 @@ def host_analyse(
             csvfilename="result.csv",
             NoMSA=True,
             host=_host,
-            pc=pc
+            pc=pc,
         )
-        data = Selenzy.updateScore(os.path.join(outdir,"result.csv"), Selenzy.seqScore())
-        outfile = os.path.join(outdir,'new.csv')
+        data = Selenzy.updateScore(
+            os.path.join(outdir, "result.csv"), Selenzy.seqScore()
+        )
+        outfile = os.path.join(outdir, "new.csv")
         df2 = Selenzy2.analyse2(
-            df=data,
-            host=host,
-            taxNodes=taxNodes,
-            datadir=datadir,
-            outfile=outfile
+            df=data, host=host, taxNodes=taxNodes, datadir=datadir, outfile=outfile
         )
 
+
 def arguments():
-    parser = argparse.ArgumentParser(description="""Run Selenzyme for multiple hosts.""")
-    parser.add_argument(
-        'rxn', 
-        help='Input reaction [default = rxn file]'
+    parser = argparse.ArgumentParser(
+        description="""Run Selenzyme for multiple hosts."""
     )
+    parser.add_argument("rxn", help="Input reaction [default = rxn file]")
     parser.add_argument(
-        '-tar',
+        "-tar",
         type=float,
         default=20,
-        help='Number of targets to display in results [default = 20]'
-        )
+        help="Number of targets to display in results [default = 20]",
+    )
     parser.add_argument(
-        '-d',
+        "-d",
         type=float,
         default=0,
-        help='Use similiarity values for preferred reaction direction only [default=0 (OFF)]'
+        help="Use similiarity values for preferred reaction direction only [default=0 (OFF)]",
     )
     parser.add_argument(
-        'datadir',
-        help='specify data directory for required databases files, please end with slash'
+        "datadir",
+        help="specify data directory for required databases files, please end with slash",
     )
     parser.add_argument(
-        'outdir',
-        help='specify output directory for all output files, including final CSV file, please end with slash'
+        "outdir",
+        help="specify output directory for all output files, including final CSV file, please end with slash",
+    )
+    parser.add_argument("-outfile", help="specify non-default name for CSV file output")
+    parser.add_argument(
+        "-NoMSA", action="store_true", help="Do not compute MSA/conservation scores"
     )
     parser.add_argument(
-        '-outfile',
-        help='specify non-default name for CSV file output'
+        "-smarts", action="store_true", help="Input is a reaction SMARTS string"
     )
     parser.add_argument(
-        '-NoMSA',
-        action='store_true',
-        help='Do not compute MSA/conservation scores'
+        "-smartsfile", action="store_true", help="Input is a reaction SMARTS file"
     )
     parser.add_argument(
-        '-smarts',
-        action='store_true',
-        help='Input is a reaction SMARTS string'
-    )
-    parser.add_argument(
-        '-smartsfile',
-        action='store_true',
-        help='Input is a reaction SMARTS file'
-    )
-    parser.add_argument(
-        '-host',
+        "-host",
         type=str,
-        default='83333',
-        help='Comma separated taxon ids [default: E. coli]'
+        default="83333",
+        help="Comma separated taxon ids [default: E. coli]",
     )
     arg = parser.parse_args()
     return arg
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     args = arguments()
     newtax(
         smarts=args.smarts,
@@ -194,5 +176,5 @@ if __name__ == '__main__':
         host=args.host,
         datadir=args.datadir,
         outdir=args.outdir,
-        targ=args.tar
+        targ=args.tar,
     )
