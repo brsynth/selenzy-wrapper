@@ -42,8 +42,8 @@ If the host is a set of hosts, the code generates "new.csv", which adds the foll
 In addition, a final column is generated where the Target ID is indicated.
 """
 
-import Selenzy
-import Selenzy2
+from selenzy_wrapper.selenzy import Selenzy
+from selenzy_wrapper.selenzy import Selenzy2
 import os
 import argparse
 from typing import (

@@ -11,7 +11,7 @@ import subprocess
 import json
 import csv
 import argparse
-import quickRsim
+from selenzy_wrapper.selenzy import quickRsim
 import numpy as np
 import pandas as pd
 from rdkit.Chem import AllChem, Draw
@@ -577,7 +577,7 @@ def pepstats(file, outdir):
             splitdata = line.split()
             percent = splitdata[3]
             polar[seq] = percent
-            seq
+            # seq
     return (hydrop, weight, isoelec, polar)
 
 

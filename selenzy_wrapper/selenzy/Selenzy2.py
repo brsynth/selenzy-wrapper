@@ -1,4 +1,4 @@
-import Selenzy
+from selenzy_wrapper.selenzy import Selenzy
 
 
 def superTax2(tax):
