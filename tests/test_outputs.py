@@ -12,7 +12,6 @@ in_file_pathway = Path(__file__).resolve().parent / "data" / "input" / "pathway.
 def test_output(tmpdir):
 
     # compare the contents of output file actual vs expected
-    # python -m selenzy_wrapper 'tests/data/input/pathway.xml' 'tests/data/output/output_test.xml' --nb_targets '500' --d '0.0' --taxonIDs '83333' --to_csv 'tests/data/output/output_test.csv'
 
     subprocess.run(
         [
