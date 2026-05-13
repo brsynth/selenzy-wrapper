@@ -16,7 +16,7 @@ class Test_Converter(TestCase):
     }
 
     def test_selenzy_pathway(self):
-        pathway = rpPathway.from_rpSBML(infile=self.input)
+        pathway = rpPathway.from_rpSBML(self.input)
         sorted_ids = selenzy_pathway(
             pathway=pathway, taxonIDs="511145,553", nb_targets=500, nb_ids=1
         )
