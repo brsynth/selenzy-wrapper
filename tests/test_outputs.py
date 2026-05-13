@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# import subprocess
+import subprocess
 from pathlib import Path
+from os.path import join
 from shutil import rmtree
 
 
@@ -13,26 +14,26 @@ def test_output(tmpdir):
     # compare the contents of output file actual vs expected
     # python -m selenzy_wrapper 'tests/data/input/pathway.xml' 'tests/data/output/output_test.xml' --nb_targets '500' --d '0.0' --taxonIDs '83333' --to_csv 'tests/data/output/output_test.csv'
 
-    # result = subprocess.run(
-    #     [
-    #         "python",
-    #         "-m",
-    #         "selenzy_wrapper",
-    #         in_file_pathway,
-    #         join(tmpdir, "output_test.xml"),
-    #         "--nb_targets",
-    #         "500",
-    #         "--d",
-    #         "0.0",
-    #         "--host_taxID",
-    #         "83333",
-    #         "--to_csv",
-    #         join(tmpdir, "output_test.csv"),
-    #         "--data-path",
-    #         tmpdir,
-    #     ],
-    #     stdout=subprocess.PIPE,
-    # )
+    subprocess.run(
+        [
+            "python",
+            "-m",
+            "selenzy_wrapper",
+            in_file_pathway,
+            join(tmpdir, "output_test.xml"),
+            "--nb_targets",
+            "500",
+            "--d",
+            "0.0",
+            "--host_taxID",
+            "83333",
+            "--to_csv",
+            join(tmpdir, "output_test.csv"),
+            "--data-path",
+            tmpdir,
+        ],
+        stdout=subprocess.PIPE,
+    )
 
     out_file = tmpdir.join("output_test.xml").strpath
     with open(out_file) as f:
