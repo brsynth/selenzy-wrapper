@@ -1,4 +1,4 @@
-name: brs_utils
+name: selenzy
 channels:
   - conda-forge
   - nodefaults
