@@ -37,7 +37,17 @@ app.config["SECRET_KEY"] = str(uuid.uuid4())
 app.config["MARVIN"] = False
 app.config["KEEPDAYS"] = 10
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = {"txt", "rxn", "smi", "smarts", "smirks", "csv", "fasta", "fas", "fa"}
+ALLOWED_EXTENSIONS = {
+    "txt",
+    "rxn",
+    "smi",
+    "smarts",
+    "smirks",
+    "csv",
+    "fasta",
+    "fas",
+    "fa",
+}
 
 
 def arguments():

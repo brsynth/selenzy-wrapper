@@ -1,4 +1,5 @@
 from os import path as os_path
+from typing import ClassVar
 from unittest import TestCase
 
 from rptools.rplibs import rpPathway
@@ -10,7 +11,7 @@ class Test_Converter(TestCase):
 
     folder = os_path.join(os_path.dirname(os_path.realpath(__file__)), "data")
     input = os_path.join(folder, "lycopene.xml")
-    sorted_ids = {
+    sorted_ids: ClassVar[dict] = {
         "rxn_1": {"P21684": {"score": 91.109, "target_ID": 553}},
         "rxn_2": {"P21683": {"score": 91.9, "target_ID": 553}},
         "rxn_3": {"P21685": {"score": 81.82, "target_ID": 553}},

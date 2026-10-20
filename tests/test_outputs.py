@@ -1,4 +1,3 @@
-
 import subprocess
 from os.path import join
 from pathlib import Path
@@ -30,6 +29,7 @@ def test_output(tmpdir):
             tmpdir,
         ],
         stdout=subprocess.PIPE,
+        check=True,
     )
 
     out_file = tmpdir.join("output_test.xml").strpath

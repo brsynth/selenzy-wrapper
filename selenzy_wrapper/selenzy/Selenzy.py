@@ -990,8 +990,8 @@ def analyse(
     write_fasta(fastaShortNameFile, targets, pc, short=True)
     write_fasta(fastaInfoNameFile, targets, pc, info=True)
 
-    _hydrop, weight, isoelec, polar, helices, sheets, turns, coils = sequence_properties(
-        fastaShortNameFile
+    _hydrop, weight, isoelec, polar, helices, sheets, turns, coils = (
+        sequence_properties(fastaShortNameFile)
     )
     if not NoMSA:
         cons = conservation_properties(fastaInfoNameFile)

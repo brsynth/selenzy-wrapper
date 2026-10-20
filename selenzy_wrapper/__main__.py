@@ -5,7 +5,7 @@ from colored import attr, fg
 from pandas import DataFrame
 from rptools.rplibs import rpPathway
 
-from .Args import DEFAULT_NB_IDS, build_args_parser
+from .args import DEFAULT_NB_IDS, build_args_parser
 from .selenzy_wrapper import selenzy_pathway
 
 
@@ -84,11 +84,11 @@ def selenzinfo2table(pathway, maxgenes=DEFAULT_NB_IDS):
         rxn.get_id(): rxn.get_selenzy() for rxn in pathway.get_list_of_reactions()
     }
     genes = DataFrame(columns=["Name", "Type", "Part", "Step"])
-    for rxn_id in selenzyme_info:
+    for rxn_id, enz_ids in selenzyme_info.items():
         nb_genes = 0
         if maxgenes == DEFAULT_NB_IDS or nb_genes < maxgenes:
             nb_genes += 1
-            for enz_id in selenzyme_info[rxn_id]:
+            for enz_id in enz_ids:
                 genes.loc[len(genes)] = [
                     enz_id,
                     "gene",
