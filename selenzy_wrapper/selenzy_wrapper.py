@@ -111,29 +111,6 @@ def Selenzy_infos(
         pc=pc,
     )
 
-    # ## READ AND COMPUTE SCORE
-    # with open(os_path.join(
-    #         outdir,
-    #         'new.csv'
-    #     )) as csv_file:
-    #     df = pd_read_csv(csv_file, delimiter=',')
-    #     for index, row in df.iterrows():
-    #         uniprotID_score[row['Seq. ID']] = (
-    #             100.0*row['Rxn Sim.']
-    #             + 1.0*row['Consv. Score']
-    #             + (-1.0)*row['Tax. distance']
-    #             + (-0.1)*row['Uniprot protein evidence']
-    #         )
-
-    # score = seqScore()
-    # data = updateScore(
-    #     os_path.join(
-    #         outdir,
-    #         'new.csv'
-    #     ),
-    #     score
-    # )
-
     # Split taxon IDs
     taxonIDs = taxonIDs.split(",")
 
