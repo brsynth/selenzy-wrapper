@@ -1,0 +1,4 @@
+[tool.ruff]
+# Vendored third-party code (standalone Selenzyme tool, folded in wholesale);
+# not maintained here, kept diff-clean against upstream.
+extend-exclude = ["selenzy_wrapper/selenzy"]

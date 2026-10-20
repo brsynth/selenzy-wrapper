@@ -1,9 +1,9 @@
-""" 
+"""
 usage: newtax.py [-h] [-tar TAR] [-d D] [-outfile OUTFILE] [-NoMSA] [-smarts]
                  [-smartsfile] [-host HOST]
                  rxn datadir outdir
 
-Run Selenzyme for multiple hosts 
+Run Selenzyme for multiple hosts
 
 positional arguments:
   rxn               Input reaction [default = rxn file]
@@ -22,15 +22,15 @@ optional arguments:
   -smarts           Input is a reaction SMARTS string
   -smartsfile       Input is a reaction SMARTS file
   -host HOST        Comma separated taxon ids [default: E. coli]
-  
-Example: 
-    python newtax.py "O=C([O-])CCC(=O)C(=O)[O-].NC(CC(=O)[O-])C(=O)O>>O=C([O-])CC(=O)C(=O)[O-].NC(CCC(=O)[O-])C(=O)O" datadir outdir -host "83333,90370,1236,590" 
+
+Example:
+    python newtax.py "O=C([O-])CCC(=O)C(=O)[O-].NC(CC(=O)[O-])C(=O)O>>O=C([O-])CC(=O)C(=O)[O-].NC(CCC(=O)[O-])C(=O)O" datadir outdir -host "83333,90370,1236,590"
 
 Notes:
-    
-This example code presents two possible modes of operation of the Selenzyme tool. 
 
-The call to Selenzy2.analyse2 accepts both as single string host or an array with different hosts. 
+This example code presents two possible modes of operation of the Selenzyme tool.
+
+The call to Selenzy2.analyse2 accepts both as single string host or an array with different hosts.
 In the command line version, if different hosts are to be entered, the host IDs must be separated by commas and not spaced.
 
 A csv file with the name "result.csv" is generated, as it was generated from the original Selenzyme code, using the first taxon_ID or the default host if is a taxonomic group, i.e. Gammaproteobacteria.
@@ -42,13 +42,10 @@ If the host is a set of hosts, the code generates "new.csv", which adds the foll
 In addition, a final column is generated where the Target ID is indicated.
 """
 
-from selenzy_wrapper.selenzy import Selenzy
-from selenzy_wrapper.selenzy import Selenzy2
-import os
 import argparse
-from typing import (
-    List,
-)
+import os
+
+from selenzy_wrapper.selenzy import Selenzy, Selenzy2
 
 fileSeqOrg = "seq_org.tsv"
 fileLineage = "org_lineage.csv"
@@ -80,7 +77,7 @@ def newtax(
     )
 
 
-def split_host(host: str) -> List[str]:
+def split_host(host: str) -> list[str]:
     return host.split(",")
 
 
@@ -89,8 +86,8 @@ def host_analyse(
 ):
     tax = Selenzy.readTaxonomy(datadir, fileLineage)
     taxNodes = Selenzy2.superTax2(tax)
-    if host == str():
-        datos = Selenzy.analyse(
+    if host == "":
+        Selenzy.analyse(
             rxnInput=rxnInput,
             targ=targ,
             datadir=datadir,
@@ -103,7 +100,7 @@ def host_analyse(
         _host = host[0]
         if _host not in tax:
             _host = "83333"
-        datos = Selenzy.analyse(
+        Selenzy.analyse(
             rxnInput=rxnInput,
             targ=targ,
             datadir=datadir,
@@ -117,7 +114,7 @@ def host_analyse(
             os.path.join(outdir, "result.csv"), Selenzy.seqScore()
         )
         outfile = os.path.join(outdir, "new.csv")
-        df2 = Selenzy2.analyse2(
+        Selenzy2.analyse2(
             df=data, host=host, taxNodes=taxNodes, datadir=datadir, outfile=outfile
         )
 

@@ -1,7 +1,9 @@
-from unittest import TestCase
 from os import path as os_path
+from typing import ClassVar
+from unittest import TestCase
 
-from rptools.rplibs import rpPathway
+from rptools.rplibs import rpPathway, rpSBML
+
 from selenzy_wrapper.selenzy_wrapper import selenzy_pathway
 
 
@@ -9,14 +11,14 @@ class Test_Converter(TestCase):
 
     folder = os_path.join(os_path.dirname(os_path.realpath(__file__)), "data")
     input = os_path.join(folder, "lycopene.xml")
-    sorted_ids = {
+    sorted_ids: ClassVar[dict] = {
         "rxn_1": {"P21684": {"score": 91.109, "target_ID": 553}},
         "rxn_2": {"P21683": {"score": 91.9, "target_ID": 553}},
         "rxn_3": {"P21685": {"score": 81.82, "target_ID": 553}},
     }
 
     def test_selenzy_pathway(self):
-        pathway = rpPathway.from_rpSBML(self.input)
+        pathway = rpPathway.from_rpSBML(rpSBML(self.input))
         sorted_ids = selenzy_pathway(
             pathway=pathway, taxonIDs="511145,553", nb_targets=500, nb_ids=1
         )

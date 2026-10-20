@@ -1,15 +1,15 @@
-from rdkit import Chem
+import csv
+import sys
+from os import path
+
+import numpy as np
+from rdkit import Chem, DataStructs
 from rdkit.Chem.rdMolDescriptors import (
-    GetMorganFingerprint,
     GetAtomPairFingerprint,
+    GetMorganFingerprint,
     GetTopologicalTorsionFingerprint,
 )
 from rdkit.Chem.rdmolops import PatternFingerprint, RDKFingerprint
-from rdkit import DataStructs
-from os import path
-import numpy as np
-import csv
-import sys
 
 
 def reactSMILES2FP(smi, smiles, fps, ffun, param):
@@ -166,7 +166,7 @@ def storeFingerprint(mol, ffun, fname, param=None, bit=False):
             continue
         fpNames.append(c)
     print("Saving...")
-    f = np.savez_compressed(fname, x=fp, y=fpNames)
+    np.savez_compressed(fname, x=fp, y=fpNames)
 
 
 def testPattern(ptfile, bit=False):
@@ -174,12 +174,12 @@ def testPattern(ptfile, bit=False):
     print("Validating fingerprint...")
     data = np.load(ptfile)
     fps = data["x"]
-    fpNames = data["y"]
+    data["y"]
     if bit:
         fp = [DataStructs.CreateFromBitString(z) for z in fps]
     else:
         fp = fps
-    sim = DataStructs.BulkTanimotoSimilarity(fp[0], list(fp))
+    DataStructs.BulkTanimotoSimilarity(fp[0], list(fp))
     return fp
 
 

@@ -1,6 +1,6 @@
-from setuptools import setup
 from os import path as os_path
 
+from setuptools import setup
 
 ## INFOS ##
 package = "selenzy_wrapper"
@@ -27,7 +27,7 @@ def get_version():
         if line.startswith("##"):
             from re import search
 
-            m = search("\[(.+)\]", line)
+            m = search(r"\[(.+)\]", line)
             if m:
                 return m.group(1)
 

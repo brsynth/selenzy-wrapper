@@ -1,14 +1,17 @@
 from argparse import ArgumentParser, Namespace
 from logging import Logger
-from colored import fg, attr
+
+from colored import attr, fg
 from pandas import DataFrame
-from .Args import build_args_parser, DEFAULT_NB_IDS
-from rptools.rplibs import rpPathway
+from rptools.rplibs import rpPathway, rpSBML
+
+from .args import DEFAULT_NB_IDS, build_args_parser
 from .selenzy_wrapper import selenzy_pathway
 
 
 def init(parser: ArgumentParser, args: Namespace) -> Logger:
     from brs_utils import create_logger
+
     from selenzy_wrapper._version import __version__
 
     if args.log.lower() in ["silent", "quiet"] or args.silent:
@@ -39,7 +42,7 @@ def entry_point():
 
     logger = init(parser, args)
 
-    pathway = rpPathway.from_rpSBML(infile=args.pathway_file)
+    pathway = rpPathway.from_rpSBML(rpSBML(args.pathway_file))
 
     taxonIDs = args.host_taxID
     if args.enzyme_taxIDs is not None:
@@ -81,11 +84,11 @@ def selenzinfo2table(pathway, maxgenes=DEFAULT_NB_IDS):
         rxn.get_id(): rxn.get_selenzy() for rxn in pathway.get_list_of_reactions()
     }
     genes = DataFrame(columns=["Name", "Type", "Part", "Step"])
-    for rxn_id in selenzyme_info:
+    for rxn_id, enz_ids in selenzyme_info.items():
         nb_genes = 0
         if maxgenes == DEFAULT_NB_IDS or nb_genes < maxgenes:
             nb_genes += 1
-            for enz_id in selenzyme_info[rxn_id]:
+            for enz_id in enz_ids:
                 genes.loc[len(genes)] = [
                     enz_id,
                     "gene",

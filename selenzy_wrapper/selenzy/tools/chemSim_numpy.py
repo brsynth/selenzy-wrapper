@@ -1,9 +1,9 @@
-from rdkit import Chem
-from rdkit.Chem.rdMolDescriptors import GetMorganFingerprint
-from rdkit import DataStructs
 from os import path
+
 import cPickle as pickle
 import numpy as np
+from rdkit import Chem, DataStructs
+from rdkit.Chem.rdMolDescriptors import GetMorganFingerprint
 
 
 def getStructs(dbfile):
@@ -59,7 +59,7 @@ print("Computing similarity...")
 tn = DataStructs.BulkTanimotoSimilarity(fp[2], list(fp))
 print("Sorting...")
 k = 0
-for i in sorted(range(0, len(tn)), key=lambda j: -tn[j]):
+for i in sorted(range(len(tn)), key=lambda j: -tn[j]):
     print(fpNames[i], tn[i])
     k += 1
     if k > 10:

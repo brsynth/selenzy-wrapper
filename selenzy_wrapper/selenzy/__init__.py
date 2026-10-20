@@ -1,3 +1,3 @@
-from .Selenzy import readData, updateScore, analyse, seqScore
-from .Selenzy2 import analyse2
 from .newtax import newtax
+from .Selenzy import analyse, readData, seqScore, updateScore
+from .Selenzy2 import analyse2

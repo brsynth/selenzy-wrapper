@@ -1,33 +1,34 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Thu Feb  9 12:20:49 2017
 
 @author: Pablo Carbonell, jerrywzy
 """
-import os
-import glob
-import time
+
 import argparse
-import uuid
+import glob
 import json
 import logging
+import os
+import time
+import uuid
 from logging.handlers import RotatingFileHandler
+
+import pandas as pd
 import Selenzy
 from flask import (
     Flask,
     flash,
+    jsonify,
+    redirect,
     render_template,
     request,
-    redirect,
-    url_for,
     send_from_directory,
-    jsonify,
+    session,
+    url_for,
 )
-from flask_restful import Resource, Api
-from flask import session
+from flask_restful import Api, Resource
 from werkzeug import secure_filename
-import pandas as pd
 
 global session
 app = Flask(__name__)
@@ -36,9 +37,17 @@ app.config["SECRET_KEY"] = str(uuid.uuid4())
 app.config["MARVIN"] = False
 app.config["KEEPDAYS"] = 10
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(
-    ["txt", "rxn", "smi", "smarts", "smirks", "csv", "fasta", "fas", "fa"]
-)
+ALLOWED_EXTENSIONS = {
+    "txt",
+    "rxn",
+    "smi",
+    "smarts",
+    "smirks",
+    "csv",
+    "fasta",
+    "fas",
+    "fa",
+}
 
 
 def arguments():
@@ -99,7 +108,7 @@ def init_session():
 def reset_session():
     global session
     uniqueid = str(uuid.uuid4())
-    app.logger.info("New session: %s" % (uniqueid,))
+    app.logger.info(f"New session: {uniqueid}")
     session["uniqueid"] = uniqueid
 
 
@@ -108,7 +117,7 @@ def run_session(rxntype, rxninfo, targets, direction, host, fp, noMSA):
     uniqueid = session["uniqueid"]
     uniquefolder = session["uniquefolder"]
     csvfile = "selenzy_results.csv"
-    app.logger.info("Run session: %s" % (uniqueid,))
+    app.logger.info(f"Run session: {uniqueid}")
     success, app.config["TABLES"] = Selenzy.analyse(
         ["-" + rxntype, rxninfo],
         targets,
@@ -160,7 +169,7 @@ def maintenance(expDay=10):
                     pass
             try:
                 os.rmdir(folder)
-                app.logger.info("Clean up: %s" % (folder,))
+                app.logger.info(f"Clean up: {folder}")
             except:
                 pass
 
@@ -236,7 +245,7 @@ class RestQuery(Resource):
                         data.append(dat)
                     data = pd.DataFrame(data)
                 else:
-                    data, csvfile, sessionid = run_session(
+                    data, _csvfile, _sessionid = run_session(
                         rxntype, rxninfo, targets, direction, host, fp, noMSA
                     )
                 return jsonify(
@@ -364,14 +373,13 @@ def post_msa():
 @app.route("/msaview", methods=["GET"])
 def display_msa():
     """Display the MSA"""
-    if request.method == "GET":
-        if "id" in request.values:
-            sessionid = request.values["id"]
-            msafile = os.path.join(
-                app.config["UPLOAD_FOLDER"], sessionid, "sequences_aln.fasta"
-            )
-            if os.path.exists(msafile):
-                return render_template("viewmsa.html", sessionid=sessionid)
+    if request.method == "GET" and "id" in request.values:
+        sessionid = request.values["id"]
+        msafile = os.path.join(
+            app.config["UPLOAD_FOLDER"], sessionid, "sequences_aln.fasta"
+        )
+        if os.path.exists(msafile):
+            return render_template("viewmsa.html", sessionid=sessionid)
     return redirect(url_for("upload_form"))
 
 
@@ -603,7 +611,7 @@ def delete_rows():
                 continue
         newtargets = []
         newrows = []
-        for j in range(0, len(rows)):
+        for j in range(len(rows)):
             if j not in filt:
                 newtargets.append(rows[j][head.index("Seq. ID")])
                 newrows.append(rows[j])
@@ -618,7 +626,7 @@ def delete_rows():
         dndFile = os.path.join(outdir, "sequences.dnd")
         if os.path.exists(dndFile):
             cons = Selenzy.doMSA(fastaShortNameFile, outdir)
-            for i in range(0, len(newrows)):
+            for i in range(len(newrows)):
                 try:
                     newrows[i][head.index("Consv. Score")] = cons[
                         newrows[i][head.index("Seq. ID")]

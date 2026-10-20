@@ -1,25 +1,25 @@
-from sys import (
-    path as sys_path,
-)
+from logging import Logger, getLogger
 from os import (
     path as os_path,
 )
-from typing import Dict
-from logging import Logger, getLogger
+from sys import (
+    path as sys_path,
+)
 from tempfile import TemporaryDirectory
-from pandas import read_csv as pd_read_csv
+
 from brs_utils import download_and_extract_tar_gz
+from pandas import read_csv as pd_read_csv
 from rptools.rplibs import rpPathway
 
-from .selenzy.Selenzy import readData
-from .selenzy.newtax import newtax
-from .Args import (
-    DEFAULT_NB_TARGETS,
-    DEFAULT_NB_IDS,
-    DEFAULT_HOST,
-    DEFAULT_DATA_FOLDER,
+from .args import (
     __PACKAGE_FOLDER,
+    DEFAULT_DATA_FOLDER,
+    DEFAULT_HOST,
+    DEFAULT_NB_IDS,
+    DEFAULT_NB_TARGETS,
 )
+from .selenzy.newtax import newtax
+from .selenzy.Selenzy import readData
 
 __SELENZY_FOLDER = "selenzy"
 sys_path.insert(0, os_path.join(__PACKAGE_FOLDER, __SELENZY_FOLDER))
@@ -35,9 +35,10 @@ def selenzy_pathway(
     nb_targets: int = DEFAULT_NB_TARGETS,
     nb_ids: int = DEFAULT_NB_IDS,
     datadir: str = DEFAULT_DATA_FOLDER,
-    logger: Logger = getLogger(__name__),
-) -> Dict:
+    logger: Logger | None = None,
+) -> dict:
 
+    logger = logger or getLogger(__name__)
     datadir_data = os_path.join(datadir, "data")
     if not os_path.exists(datadir_data):
         logger.info(f"Downloading databases into '{os_path.abspath(datadir)}'...")
@@ -75,8 +76,8 @@ def selenzy_pathway(
         )
 
         # Round the value
-        for id in sorted_ids:
-            sorted_ids[id]["score"] = round(sorted_ids[id]["score"], 3)
+        for info in sorted_ids.values():
+            info["score"] = round(info["score"], 3)
 
         rxn.add_miriam("uniprot", list(sorted_ids.keys()))
         rxn.set_selenzy_infos(sorted_ids)
@@ -93,9 +94,10 @@ def Selenzy_infos(
     outdir: str,
     nb_targets: str,
     pc,
-    logger: Logger = getLogger(__name__),
-) -> Dict:
+    logger: Logger | None = None,
+) -> dict:
 
+    logger = logger or getLogger(__name__)
     infos = {}
 
     newtax(
@@ -108,29 +110,6 @@ def Selenzy_infos(
         targ=nb_targets,
         pc=pc,
     )
-
-    # ## READ AND COMPUTE SCORE
-    # with open(os_path.join(
-    #         outdir,
-    #         'new.csv'
-    #     )) as csv_file:
-    #     df = pd_read_csv(csv_file, delimiter=',')
-    #     for index, row in df.iterrows():
-    #         uniprotID_score[row['Seq. ID']] = (
-    #             100.0*row['Rxn Sim.']
-    #             + 1.0*row['Consv. Score']
-    #             + (-1.0)*row['Tax. distance']
-    #             + (-0.1)*row['Uniprot protein evidence']
-    #         )
-
-    # score = seqScore()
-    # data = updateScore(
-    #     os_path.join(
-    #         outdir,
-    #         'new.csv'
-    #     ),
-    #     score
-    # )
 
     # Split taxon IDs
     taxonIDs = taxonIDs.split(",")
@@ -172,7 +151,6 @@ def Selenzy_infos(
     return infos
 
 
-def set_infos(
-    score: float, target_id: str, logger: Logger = getLogger(__name__)
-) -> Dict:
+def set_infos(score: float, target_id: str, logger: Logger | None = None) -> dict:
+    logger = logger or getLogger(__name__)
     return {"score": score, "target_ID": target_id}

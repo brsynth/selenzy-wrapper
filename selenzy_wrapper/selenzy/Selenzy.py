@@ -1,30 +1,32 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Tue Feb  7 10:53:03 2017
 
 @author: jerrywzy, Pablo Carbonell
 """
-import re
-import os
-import subprocess
-import json
-import csv
+
 import argparse
-from selenzy_wrapper.selenzy import quickRsim
+import csv
+import json
+import os
+import re
+import subprocess
+
 import numpy as np
 import pandas as pd
 from rdkit.Chem import AllChem, Draw
 
+from selenzy_wrapper.selenzy import quickRsim
 
-class preLoad(object):
+
+class preLoad:
     """Container of precomputed data"""
 
     def __init__(self):
         pass
 
     def fasta(self, datadir, ffile="seqs.fasta"):
-        (sequence, names, descriptions, fulldescriptions, osource, pexistence) = (
+        sequence, names, descriptions, fulldescriptions, osource, pexistence = (
             readFasta(datadir, ffile)
         )
         self.sequence = sequence
@@ -44,7 +46,7 @@ class preLoad(object):
             self.MnxToUprot = {}
             self.UprotToMnx = {}
             for row in f:
-                mnxr, db, seqid, source, ec = row.split("\t")
+                mnxr, db, seqid, _source, _ec = row.split("\t")
                 if db == "uniprot":
                     if mnxr not in self.MnxToUprot:
                         self.MnxToUprot[mnxr] = set()
@@ -172,7 +174,7 @@ def display_reaction(rxninfo, outfolder, outname, marvin=False):
         try:
             cmd = ["molconvert", "svg:w500", rxninfo]
             job = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = job.communicate()
+            _out, _err = job.communicate()
             outimage = os.path.join(outfolder, outname + ".svg")
             return outimage, (600, 400)
         except:
@@ -288,7 +290,7 @@ def updateScore(csvfile, score):
     """Add or update score column and reorder"""
     import string
 
-    head, rows = read_csv(csvfile)
+    _head, _rows = read_csv(csvfile)
     data = pd.read_csv(csvfile)
     data.index = data.index + 1
     cols = data.columns.tolist()
@@ -536,7 +538,7 @@ def ecSmiles(ecrxn, rsmi, rxnref):
 def reactionSmiles(rxnSmilesFile):
     rsmi = {}
     with open(rxnSmilesFile) as handler:
-        header = handler.readline()
+        handler.readline()
         for line in handler:
             row = line.rstrip().split(",")
             if len(row) > 1:
@@ -551,7 +553,7 @@ def reactionSmiles(rxnSmilesFile):
 
 def pepstats(file, outdir):
     outfile = os.path.join(outdir, "results.pepstats")
-    args = "pepstats -sequence {0} -outfile ".format(file) + outfile
+    args = f"pepstats -sequence {file} -outfile " + outfile
     os.system(args)  # nosec
 
     f = open(outfile, "r")
@@ -583,8 +585,8 @@ def pepstats(file, outdir):
 
 def noAmbiguousSeqs(infile, outfile):
     """Remove ambigous amino acid codes"""
-    from Bio.Data.IUPACData import protein_letters_1to3, extended_protein_values
     from Bio import SeqIO
+    from Bio.Data.IUPACData import extended_protein_values, protein_letters_1to3
     from Bio.Seq import Seq
     from Bio.SeqRecord import SeqRecord
 
@@ -607,7 +609,7 @@ def garnier(file, outdir):
     noAmbiguousSeqs(file, fixfile)
     outfile = os.path.join(outdir, "garnier.txt")
 
-    args = "garnier -sequence {0} -outfile ".format(fixfile) + outfile
+    args = f"garnier -sequence {fixfile} -outfile " + outfile
     os.system(args)  # nosec
 
     f = open(outfile, "r")
@@ -662,8 +664,7 @@ def updateMSA(outdir, sortrows):
             try:
                 pid = row[0]
                 if pid in fasta:
-                    for seq in fasta[pid]:
-                        hw.write(seq)
+                    hw.writelines(fasta[pid])
             except:
                 continue
 
@@ -676,9 +677,7 @@ def doMSA(finallistfile, outdir):
     align_fasta = os.path.join(outdir, "sequences_aln.fasta")
     treefile = os.path.join(outdir, "sequences.dnd")
     args = (
-        "t_coffee -in {0} -mode quickaln -output=score_ascii,fasta_aln,score_html -outfile ".format(
-            finallistfile
-        )
+        f"t_coffee -in {finallistfile} -mode quickaln -output=score_ascii,fasta_aln,score_html -outfile "
         + outfile
         + " -newtree "
         + treefile
@@ -746,8 +745,8 @@ def sort_rows(rows, columns):
 
 def write_fasta(fastaFile, targets, pc, short=False, info=False, maxlength=25):
     def shorten(s, maxlength=maxlength):
-        ns = re.sub("\s+", "_", s)
-        ns = re.sub("\|", "_", ns)
+        ns = re.sub(r"\s+", "_", s)
+        ns = re.sub(r"\|", "_", ns)
         if len(ns) > maxlength:
             ns = "".join(list(ns)[0:maxlength]) + "..."
         return ns
@@ -774,12 +773,12 @@ def write_fasta(fastaFile, targets, pc, short=False, info=False, maxlength=25):
                                 ecl |= pc.rxnec[r]
                     ec = ";".join(sorted(ecl))
                     st = "_".join([t, shorten(desc, 30), shorten(org), ec])
-                    print(">{0} \n{1}".format(st, seq), file=f)
+                    print(f">{st} \n{seq}", file=f)
                 elif short:
-                    print(">{0} \n{1}".format(t, seq), file=f)
+                    print(f">{t} \n{seq}", file=f)
                 else:
                     fdesc = pc.fulldescriptions[t]
-                    print(">{0} \n{1}".format(fdesc, seq), file=f)
+                    print(f">{fdesc} \n{seq}", file=f)
             except KeyError:
                 pass
 
@@ -806,21 +805,20 @@ def extend_sequences(initialfastafile, fastafile, workfolder, noMSA):
     shortfile = short_fasta(os.path.join(workfolder, fastafile))
     try:
         # TO do: Check that does not assume Uniprot format...
-        (sequence, names, descriptions, fulldescriptions, osource, pexistence) = (
+        sequence, names, descriptions, fulldescriptions, osource, pexistence = (
             readFasta(workfolder, fastafile, limit=1000)
         )
 
         if len(sequence) == 0:
             return csvfile
 
-        (hydrop, weight, isoelec, polar, helices, sheets, turns, coils) = (
+        _hydrop, weight, isoelec, polar, helices, sheets, turns, coils = (
             sequence_properties(os.path.join(workfolder, shortfile))
         )
         fasta = open(os.path.join(workfolder, initialfastafile)).readlines()
         fasta.extend(open(os.path.join(workfolder, fastafile)).readlines())
         with open(os.path.join(workfolder, initialfastafile), "w") as handler:
-            for line in fasta:
-                handler.write(line)
+            handler.writelines(fasta)
         shortfile = short_fasta(os.path.join(workfolder, initialfastafile))
         if not noMSA:
             cons = conservation_properties(os.path.join(workfolder, shortfile))
@@ -837,7 +835,7 @@ def extend_sequences(initialfastafile, fastafile, workfolder, noMSA):
             seqid = r[head.index("Seq. ID")]
             if seqid in cons:
                 r[head.index("Consv. Score")] = cons[seqid]
-    for k in range(0, len(fulldescriptions)):
+    for k in range(len(fulldescriptions)):
         n = names[k]
         try:
             conservation = cons[n]
@@ -898,10 +896,10 @@ def extend_sequences(initialfastafile, fastafile, workfolder, noMSA):
 
 def sequence_properties(fastaShortNameFile):
     # analysis of final list of sequences
-    (hydrop, weight, isoelec, polar) = pepstats(
+    hydrop, weight, isoelec, polar = pepstats(
         fastaShortNameFile, os.path.dirname(fastaShortNameFile)
     )
-    (helices, sheets, turns, coils) = garnier(
+    helices, sheets, turns, coils = garnier(
         fastaShortNameFile, os.path.dirname(fastaShortNameFile)
     )
     return hydrop, weight, isoelec, polar, helices, sheets, turns, coils
@@ -941,14 +939,12 @@ def analyse(
 
     print("Running quickRsim...")
     try:
-        (MnxSim, MnxDirPref, MnxDirUsed, Smiles, EcNumber) = getMnxSim(
+        MnxSim, MnxDirPref, MnxDirUsed, Smiles, EcNumber = getMnxSim(
             rxnInput, datadir, outdir, pdir, fp, pc
         )
     except:
         return False, pc
 
-    sequence = pc.sequence
-    names = pc.names
     descriptions = pc.descriptions
     fulldescriptions = pc.fulldescriptions
     osource = pc.osource
@@ -994,7 +990,7 @@ def analyse(
     write_fasta(fastaShortNameFile, targets, pc, short=True)
     write_fasta(fastaInfoNameFile, targets, pc, info=True)
 
-    (hydrop, weight, isoelec, polar, helices, sheets, turns, coils) = (
+    _hydrop, weight, isoelec, polar, helices, sheets, turns, coils = (
         sequence_properties(fastaShortNameFile)
     )
     if not NoMSA:
@@ -1011,20 +1007,19 @@ def analyse(
         try:
             # Essential sequence information
             desc = descriptions[y]
-            fdesc = fulldescriptions[y]
+            fulldescriptions[y]
             org = osource[y]
             ext = pexistence[y]
             mnx = UprotToMnx[y]
             rxnsimpre = float(MnxSim[mnx])
-            rxnsim = float("{0:.5f}".format(rxnsimpre))
+            rxnsim = float(f"{rxnsimpre:.5f}")
 
             # Non-essential sequence information
             try:
                 cn = upclst.get(y)
-                repid = clstrep[cn]
+                clstrep[cn]
             except:
                 cn = 0
-                repid = y
             try:
                 conservation = float(cons[y])
             except:
@@ -1056,7 +1051,6 @@ def analyse(
                 rxndirpref = MnxDirPref[mnx]
             except:
                 rxndirused = 1
-                rxndirpred = 1
 
             mnxSmiles = ""
             if mnx in smir:
