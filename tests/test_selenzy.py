@@ -2,7 +2,7 @@ from os import path as os_path
 from typing import ClassVar
 from unittest import TestCase
 
-from rptools.rplibs import rpPathway
+from rptools.rplibs import rpPathway, rpSBML
 
 from selenzy_wrapper.selenzy_wrapper import selenzy_pathway
 
@@ -18,7 +18,7 @@ class Test_Converter(TestCase):
     }
 
     def test_selenzy_pathway(self):
-        pathway = rpPathway.from_rpSBML(self.input)
+        pathway = rpPathway.from_rpSBML(rpSBML(self.input))
         sorted_ids = selenzy_pathway(
             pathway=pathway, taxonIDs="511145,553", nb_targets=500, nb_ids=1
         )
