@@ -3,7 +3,7 @@ from logging import Logger
 
 from colored import attr, fg
 from pandas import DataFrame
-from rptools.rplibs import rpPathway
+from rptools.rplibs import rpPathway, rpSBML
 
 from .args import DEFAULT_NB_IDS, build_args_parser
 from .selenzy_wrapper import selenzy_pathway
@@ -42,7 +42,7 @@ def entry_point():
 
     logger = init(parser, args)
 
-    pathway = rpPathway.from_rpSBML(infile=args.pathway_file)
+    pathway = rpPathway.from_rpSBML(rpSBML(args.pathway_file))
 
     taxonIDs = args.host_taxID
     if args.enzyme_taxIDs is not None:

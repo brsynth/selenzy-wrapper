@@ -1,22 +1,40 @@
+import csv
 import subprocess
-from os.path import join
+import sys
 from pathlib import Path
-from shutil import rmtree
+from xml.etree import ElementTree
 
-in_file_pathway = Path(__file__).resolve().parent / "data" / "input" / "pathway.xml"
+from selenzy_wrapper.args import DEFAULT_DATA_FOLDER
+
+DATA_FOLDER = Path(__file__).resolve().parent / "data"
 
 
-def test_output(tmpdir):
+def read_enzyme_annotations(path):
+    namespaces = {
+        "sbml": "http://www.sbml.org/sbml/level3/version1/core",
+        "brsynth": "http://brsynth.eu",
+    }
+    root = ElementTree.parse(path).getroot()
+    return {
+        reaction.attrib["id"]: {
+            annotation.tag: {field.tag: field.attrib for field in annotation}
+            for annotation in reaction.findall(".//brsynth:brsynth/*", namespaces)
+            if annotation.tag.startswith("{http://brsynth.eu}selenzy_")
+        }
+        for reaction in root.findall(".//sbml:reaction", namespaces)
+    }
 
-    # compare the contents of output file actual vs expected
 
+def test_output(tmp_path):
+    output_xml = tmp_path / "output_test.xml"
+    output_csv = tmp_path / "output_test.csv"
     subprocess.run(
         [
-            "python",
+            sys.executable,
             "-m",
             "selenzy_wrapper",
-            in_file_pathway,
-            join(tmpdir, "output_test.xml"),
+            str(DATA_FOLDER / "input" / "pathway.xml"),
+            str(output_xml),
             "--nb_targets",
             "500",
             "--d",
@@ -24,40 +42,25 @@ def test_output(tmpdir):
             "--host_taxID",
             "83333",
             "--to_csv",
-            join(tmpdir, "output_test.csv"),
+            str(output_csv),
             "--data-path",
-            tmpdir,
+            DEFAULT_DATA_FOLDER,
         ],
         stdout=subprocess.PIPE,
         check=True,
     )
 
-    out_file = tmpdir.join("output_test.xml").strpath
-    with open(out_file) as f:
-        actual = f.readlines()
-        actual.sort()
+    # Compare enzyme IDs, scores and taxon IDs independently of SBML serialization.
+    expected_annotations = read_enzyme_annotations(
+        DATA_FOLDER / "output" / "output_test.xml"
+    )
+    assert expected_annotations
+    assert all(expected_annotations.values())
+    assert read_enzyme_annotations(output_xml) == expected_annotations
 
-    fname = Path(__file__).resolve().parent / "data" / "output" / "output_test.xml"
-    with open(fname) as f:
-        expected = f.readlines()
-        expected.sort()
-
-    print("actual:", actual)
-    print("expected:", expected)
-    assert actual == expected
-
-    out_file = tmpdir.join("output_test.csv").strpath
-    with open(out_file) as f:
-        actual = f.readlines()
-        actual.sort()
-
-    fname = Path(__file__).resolve().parent / "data" / "output" / "output_test.csv"
-    with open(fname) as f:
-        expected = f.readlines()
-        expected.sort()
-
-    print("actual:", actual)
-    print("expected:", expected)
-    assert actual == expected
-
-    rmtree(tmpdir)
+    with output_csv.open(newline="") as actual_file:
+        actual = list(csv.reader(actual_file))
+    with (DATA_FOLDER / "output" / "output_test.csv").open(newline="") as expected_file:
+        expected = list(csv.reader(expected_file))
+    assert actual[0] == expected[0]
+    assert sorted(actual[1:]) == sorted(expected[1:])
