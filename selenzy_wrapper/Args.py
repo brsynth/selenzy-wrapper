@@ -1,14 +1,12 @@
 from argparse import ArgumentParser
+from collections.abc import Callable
 from os import (
     path as os_path,
 )
-from typing import (
-    Callable,
-)
 
-from selenzy_wrapper._version import __version__
 from brs_utils import add_logger_args
 
+from selenzy_wrapper._version import __version__
 
 DEFAULT_NB_TARGETS = 20
 DEFAULT_NB_IDS = -1
@@ -22,7 +20,7 @@ def build_args_parser(
     prog: str,
     description: str = "",
     epilog: str = "",
-    m_add_args: Callable = None,
+    m_add_args: Callable | None = None,
 ) -> ArgumentParser:
 
     parser = ArgumentParser(prog=prog, description=description, epilog=epilog)
@@ -46,7 +44,7 @@ def _add_arguments(parser: ArgumentParser) -> ArgumentParser:
     parser.add_argument(
         "--version",
         action="version",
-        version="%(prog)s {}".format(__version__),
+        version=f"%(prog)s {__version__}",
         help="show the version number and exit",
     )
 

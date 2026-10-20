@@ -1,7 +1,8 @@
-from unittest import TestCase
 from os import path as os_path
+from unittest import TestCase
 
 from rptools.rplibs import rpPathway
+
 from selenzy_wrapper.selenzy_wrapper import selenzy_pathway
 
 

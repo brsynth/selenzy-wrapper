@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 
 import subprocess
-from pathlib import Path
 from os.path import join
+from pathlib import Path
 from shutil import rmtree
-
 
 in_file_pathway = Path(__file__).resolve().parent / "data" / "input" / "pathway.xml"
 

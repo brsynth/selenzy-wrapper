@@ -1,14 +1,17 @@
 from argparse import ArgumentParser, Namespace
 from logging import Logger
-from colored import fg, attr
+
+from colored import attr, fg
 from pandas import DataFrame
-from .Args import build_args_parser, DEFAULT_NB_IDS
 from rptools.rplibs import rpPathway
+
+from .Args import DEFAULT_NB_IDS, build_args_parser
 from .selenzy_wrapper import selenzy_pathway
 
 
 def init(parser: ArgumentParser, args: Namespace) -> Logger:
     from brs_utils import create_logger
+
     from selenzy_wrapper._version import __version__
 
     if args.log.lower() in ["silent", "quiet"] or args.silent:

@@ -1,25 +1,25 @@
-from sys import (
-    path as sys_path,
-)
+from logging import Logger, getLogger
 from os import (
     path as os_path,
 )
-from typing import Dict
-from logging import Logger, getLogger
+from sys import (
+    path as sys_path,
+)
 from tempfile import TemporaryDirectory
-from pandas import read_csv as pd_read_csv
+
 from brs_utils import download_and_extract_tar_gz
+from pandas import read_csv as pd_read_csv
 from rptools.rplibs import rpPathway
 
-from .selenzy.Selenzy import readData
-from .selenzy.newtax import newtax
 from .Args import (
-    DEFAULT_NB_TARGETS,
-    DEFAULT_NB_IDS,
-    DEFAULT_HOST,
-    DEFAULT_DATA_FOLDER,
     __PACKAGE_FOLDER,
+    DEFAULT_DATA_FOLDER,
+    DEFAULT_HOST,
+    DEFAULT_NB_IDS,
+    DEFAULT_NB_TARGETS,
 )
+from .selenzy.newtax import newtax
+from .selenzy.Selenzy import readData
 
 __SELENZY_FOLDER = "selenzy"
 sys_path.insert(0, os_path.join(__PACKAGE_FOLDER, __SELENZY_FOLDER))
@@ -36,7 +36,7 @@ def selenzy_pathway(
     nb_ids: int = DEFAULT_NB_IDS,
     datadir: str = DEFAULT_DATA_FOLDER,
     logger: Logger = getLogger(__name__),
-) -> Dict:
+) -> dict:
 
     datadir_data = os_path.join(datadir, "data")
     if not os_path.exists(datadir_data):
@@ -94,7 +94,7 @@ def Selenzy_infos(
     nb_targets: str,
     pc,
     logger: Logger = getLogger(__name__),
-) -> Dict:
+) -> dict:
 
     infos = {}
 
@@ -174,5 +174,5 @@ def Selenzy_infos(
 
 def set_infos(
     score: float, target_id: str, logger: Logger = getLogger(__name__)
-) -> Dict:
+) -> dict:
     return {"score": score, "target_ID": target_id}

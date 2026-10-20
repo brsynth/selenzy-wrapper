@@ -7,21 +7,21 @@ To view a copy of this license, visit <http://opensource.org/licenses/MIT/>.
 
 @author:  Pablo Carbonell, SYNBIOCHEM
 @description: Compute a fast reaction similarity with the database
-@examples: 
+@examples:
 1. Compute similarity to one reaction in the database (requires -chem parameter)
 python quickRsim.py data/reac_prop.tsv data/metanetx.fs -rid MNXR3215 -chem data/chem_prop.tsv
 2. Compute similarity to a given reaction file for a threshold above 0.9
 python quickRsim.py data/reac_prop.tsv data/metanetx.fs -rxn rhea15870.rxn -th 0.9
 """
 
-from __future__ import print_function
 import argparse
-import subprocess
-import os
-from rdkit.Chem import rdChemReactions
 import math
+import os
+import subprocess
+
 import numpy as np
-from rdkit import DataStructs, Chem
+from rdkit import Chem, DataStructs
+from rdkit.Chem import rdChemReactions
 from rdkit.Chem.rdMolDescriptors import (
     GetMorganFingerprint,
 )
@@ -119,7 +119,7 @@ def getClosest(
                 cmd2, stdin=job.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE
             )
             job.stdout.close()
-            out, err = job2.communicate()
+            out, _err = job2.communicate()
             targetMol = Chem.MolFromSmiles(out)
         except:
             pass
@@ -128,7 +128,7 @@ def getClosest(
     else:
         targetFp = fpfun(targetMol)
     tn = DataStructs.BulkTanimotoSimilarity(targetFp, list(fp))
-    for i in sorted(range(0, len(tn))):
+    for i in sorted(range(len(tn))):
         dist[fpn[i]] = tn[i]
     return dist, fp, fpn
 
@@ -280,7 +280,6 @@ def run(arg, pc):
         s1, p1 = rTarget[r1]
         for r2 in rsp:
             s2, p2, ec2 = rsp[r2]
-            debug = False
             S1, S2 = getRSim(s1, p1, s2, p2, sim)
             if S1 > 0 and S2 > 0:
                 #                print(r1, r2, S1, S2, smiles, ec2)
