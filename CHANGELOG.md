@@ -1,12 +1,24 @@
 # Changelog
 
+## [0.3.3](https://github.com/brsynth/selenzy-wrapper/tree/0.3.3) (2026-10-21)
+
+[Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.3.2...0.3.3)
+
 ## [0.3.2](https://github.com/brsynth/selenzy-wrapper/tree/0.3.2) (2026-10-20)
 
 [Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.3.1...0.3.2)
 
+**Merged pull requests:**
+
+- build\(environment.yaml\): pin rptools version [\#4](https://github.com/brsynth/selenzy-wrapper/pull/4) ([breakthewall](https://github.com/breakthewall))
+
 ## [0.3.1](https://github.com/brsynth/selenzy-wrapper/tree/0.3.1) (2026-05-13)
 
 [Full Changelog](https://github.com/brsynth/selenzy-wrapper/compare/0.3.0...0.3.1)
+
+**Merged pull requests:**
+
+- Main [\#3](https://github.com/brsynth/selenzy-wrapper/pull/3) ([breakthewall](https://github.com/breakthewall))
 
 ## [0.3.0](https://github.com/brsynth/selenzy-wrapper/tree/0.3.0) (2022-06-21)
 
