@@ -1,12 +1,7 @@
 from argparse import ArgumentParser
-from collections.abc import Callable
 from os import (
     path as os_path,
 )
-
-from brs_utils import add_logger_args
-
-from selenzy_wrapper._version import __version__
 
 DEFAULT_NB_TARGETS = 20
 DEFAULT_NB_IDS = -1
@@ -14,41 +9,6 @@ DEFAULT_HOST = "83333"
 DEFAULT_MAX_NB_GENES = 5
 __PACKAGE_FOLDER = os_path.dirname(os_path.realpath(__file__))
 DEFAULT_DATA_FOLDER = __PACKAGE_FOLDER
-
-
-def build_args_parser(
-    prog: str,
-    description: str = "",
-    epilog: str = "",
-    m_add_args: Callable | None = None,
-) -> ArgumentParser:
-
-    parser = ArgumentParser(prog=prog, description=description, epilog=epilog)
-
-    # Build Parser with rptools common arguments
-    parser = _add_arguments(parser)
-
-    # Add module specific arguments
-    if m_add_args is None:
-        parser = add_arguments(parser)
-    else:
-        parser = m_add_args(parser)
-
-    return parser
-
-
-def _add_arguments(parser: ArgumentParser) -> ArgumentParser:
-    # Add arguments related to the logger
-    parser = add_logger_args(parser)
-
-    parser.add_argument(
-        "--version",
-        action="version",
-        version=f"%(prog)s {__version__}",
-        help="show the version number and exit",
-    )
-
-    return parser
 
 
 def add_arguments(parser: ArgumentParser) -> ArgumentParser:
