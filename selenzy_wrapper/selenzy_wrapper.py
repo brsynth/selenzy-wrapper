@@ -9,7 +9,7 @@ from tempfile import TemporaryDirectory
 
 from brs_utils import download_and_extract_tar_gz
 from pandas import read_csv as pd_read_csv
-from rptools.rplibs import rpPathway
+from rplibs import rpPathway
 
 from .args import (
     __PACKAGE_FOLDER,

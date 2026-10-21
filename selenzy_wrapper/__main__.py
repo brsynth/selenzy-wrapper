@@ -1,48 +1,26 @@
-from argparse import ArgumentParser, Namespace
-from logging import Logger
 
-from colored import attr, fg
+from brs_utils import build_args_parser
+from brs_utils import init as init_logger
 from pandas import DataFrame
-from rptools.rplibs import rpPathway, rpSBML
+from rplibs import rpPathway
 
-from .args import DEFAULT_NB_IDS, build_args_parser
+from ._version import __version__
+from .args import DEFAULT_NB_IDS, add_arguments
 from .selenzy_wrapper import selenzy_pathway
-
-
-def init(parser: ArgumentParser, args: Namespace) -> Logger:
-    from brs_utils import create_logger
-
-    from selenzy_wrapper._version import __version__
-
-    if args.log.lower() in ["silent", "quiet"] or args.silent:
-        args.log = "CRITICAL"
-
-    # Create logger
-    logger = create_logger(parser.prog, args.log)
-
-    logger.info(
-        "{color}{typo}{prog} {version}{rst}{color}{rst}\n".format(
-            prog=logger.name,
-            version=__version__,
-            color=fg("white"),
-            typo=attr("bold"),
-            rst=attr("reset"),
-        )
-    )
-    logger.debug(args)
-
-    return logger
 
 
 def entry_point():
     parser = build_args_parser(
-        prog="selenzy-wrapper", description="rpSBML wrapper for selenzy tool"
+        prog="selenzy-wrapper",
+        version=__version__,
+        description="rpSBML wrapper for selenzy tool",
+        m_add_args=add_arguments,
     )
     args = parser.parse_args()
 
-    logger = init(parser, args)
+    logger = init_logger(parser, args, __version__)
 
-    pathway = rpPathway.from_rpSBML(rpSBML(args.pathway_file))
+    pathway = rpPathway(args.pathway_file)
 
     taxonIDs = args.host_taxID
     if args.enzyme_taxIDs is not None:

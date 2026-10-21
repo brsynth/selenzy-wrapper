@@ -2,7 +2,7 @@ from os import path as os_path
 from typing import ClassVar
 from unittest import TestCase
 
-from rptools.rplibs import rpPathway, rpSBML
+from rplibs import rpPathway, rpSBML
 
 from selenzy_wrapper.selenzy_wrapper import selenzy_pathway
 
