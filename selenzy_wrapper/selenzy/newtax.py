@@ -44,11 +44,14 @@ In addition, a final column is generated where the Target ID is indicated.
 
 import argparse
 import os
+from logging import Logger, getLogger
 
 from selenzy_wrapper.selenzy import Selenzy, Selenzy2
 
 fileSeqOrg = "seq_org.tsv"
 fileLineage = "org_lineage.csv"
+
+DEFAULT_FALLBACK_HOST = "83333"
 
 
 def newtax(
@@ -60,6 +63,7 @@ def newtax(
     outdir: str,
     targ: str,
     pc=None,
+    logger: Logger | None = None,
 ):
     newpath = os.path.join(outdir)
     if not os.path.exists(newpath):
@@ -73,7 +77,13 @@ def newtax(
     # Convert host list to array
     host = split_host(host)
     host_analyse(
-        rxnInput=rxnInput, host=host, targ=targ, datadir=datadir, outdir=outdir, pc=pc
+        rxnInput=rxnInput,
+        host=host,
+        targ=targ,
+        datadir=datadir,
+        outdir=outdir,
+        pc=pc,
+        logger=logger,
     )
 
 
@@ -82,8 +92,15 @@ def split_host(host: str) -> list[str]:
 
 
 def host_analyse(
-    rxnInput: str, datadir: str, outdir: str, host: str, targ: str, pc=None
+    rxnInput: str,
+    datadir: str,
+    outdir: str,
+    host: str,
+    targ: str,
+    pc=None,
+    logger: Logger | None = None,
 ):
+    logger = logger or getLogger(__name__)
     tax = Selenzy.readTaxonomy(datadir, fileLineage)
     taxNodes = Selenzy2.superTax2(tax)
     if host == "":
@@ -99,7 +116,12 @@ def host_analyse(
     else:
         _host = host[0]
         if _host not in tax:
-            _host = "83333"
+            logger.warning(
+                f"Host taxon ID '{_host}' has no lineage entry in '{fileLineage}'; "
+                f"falling back to default host '{DEFAULT_FALLBACK_HOST}' (E. coli) "
+                "for the taxonomic distance score."
+            )
+            _host = DEFAULT_FALLBACK_HOST
         Selenzy.analyse(
             rxnInput=rxnInput,
             targ=targ,

@@ -43,7 +43,6 @@ def analyse2(df, host, taxNodes, datadir, outfile=None):
         taxid = seqorg[seqid][0]
         for org in host:
             distancia = taxDistsance2021(taxNodes, org, taxid)
-            print(org, taxid, distancia)
             df.loc[rowi, org + "_target_host_dist"] = distancia[0]
             df.loc[rowi, org + " " "_host_ca_dist"] = distancia[1]
             df.loc[rowi, org + " " "_target_ca_dist"] = distancia[2]

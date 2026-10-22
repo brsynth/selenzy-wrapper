@@ -109,6 +109,7 @@ def Selenzy_infos(
         outdir=outdir,
         targ=nb_targets,
         pc=pc,
+        logger=logger,
     )
 
     # Split taxon IDs
